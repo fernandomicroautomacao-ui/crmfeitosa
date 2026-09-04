@@ -6,6 +6,7 @@ function renderizarClientes() {
     const tbody = document.getElementById('clientesTableBody');
     const search = document.getElementById('searchInput').value.toLowerCase();
     const potencialFilter = document.getElementById('filterPotencial').value;
+    const classificacaoFilter = document.getElementById('filterClassificacao')?.value || '';
     const leadsVisiveis = getLeadsVisiveis();
 
     const agrupados = {};
@@ -23,6 +24,7 @@ function renderizarClientes() {
                     whatsapp: l.whatsapp || '',
                     email: l.email || '',
                     potencial: l.potencial || 'B',
+                    classificacao: l.classificacao || 'outros',
                     numeroPedido: l.numeroPedido || '',
                     valorTotal: 0,
                     contagem: 0
@@ -41,7 +43,8 @@ function renderizarClientes() {
             c.codigoUnico.toLowerCase().includes(search) ||
             c.cidade.toLowerCase().includes(search);
         const matchPotencial = !potencialFilter || c.potencial === potencialFilter;
-        return matchSearch && matchPotencial;
+        const matchClassificacao = !classificacaoFilter || c.classificacao === classificacaoFilter;
+        return matchSearch && matchPotencial && matchClassificacao;
     });
 
     if (lista.length === 0) {
@@ -50,12 +53,17 @@ function renderizarClientes() {
         return;
     }
 
-    tbody.innerHTML = lista.map(c => `
+    tbody.innerHTML = lista.map(c => {
+        const classifObj = CLASSIFICACOES_LEAD.find(cl => cl.id === c.classificacao) || CLASSIFICACOES_LEAD[4];
+        return `
         <tr class="clickable" tabindex="0" role="button" onclick="abrirModalCliente('${c.id}')"
             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirModalCliente('${c.id}')}">
             <td>
                 <strong>${c.empresa}</strong>
-                <div class="text-xs text-muted">${c.cidade}/${c.estado}</div>
+                <div class="text-xs text-muted" style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+                    <span>${c.cidade}/${c.estado}</span>
+                    <span class="card-classif-badge" style="color:${classifObj.cor};background:${classifObj.bg};border:1px solid ${classifObj.cor}33;padding:1px 6px;font-size:10px;">${classifObj.label}</span>
+                </div>
             </td>
             <td>
                 ${c.whatsapp ? `${c.whatsapp}<br>` : ''}
@@ -77,12 +85,14 @@ function renderizarClientes() {
                 </div>
             </td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function resetarFiltros() {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterPotencial').value = '';
+    if (document.getElementById('filterClassificacao')) document.getElementById('filterClassificacao').value = '';
     renderizarClientes();
 }
 
@@ -127,10 +137,12 @@ function abrirModalCliente(leadId) {
     });
     negociosHtml += `</div>`;
 
+    const classifPrincipal = CLASSIFICACOES_LEAD.find(c => c.id === (principal.classificacao || 'outros')) || CLASSIFICACOES_LEAD[4];
     const html = `
         <div class="cliente-info-grid">
             <div class="info-item"><span class="info-item-label">Código Único</span><span class="info-item-value"><span class="info-badge">${codigo}</span></span></div>
             <div class="info-item"><span class="info-item-label">Empresa</span><span class="info-item-value">${principal.empresa}</span></div>
+            <div class="info-item"><span class="info-item-label">Classificação</span><span class="info-item-value"><span class="card-classif-badge" style="color:${classifPrincipal.cor};background:${classifPrincipal.bg};border:1px solid ${classifPrincipal.cor}33;">${classifPrincipal.label}</span></span></div>
             <div class="info-item"><span class="info-item-label">Decisor</span><span class="info-item-value">${principal.decisor || '—'}</span></div>
             <div class="info-item"><span class="info-item-label">Telefone</span><span class="info-item-value">${principal.telefone || '—'}</span></div>
             <div class="info-item"><span class="info-item-label">WhatsApp</span><span class="info-item-value">${principal.whatsapp || '—'}</span></div>
@@ -192,6 +204,7 @@ function gerarNovoNegocio(leadId) {
         decisor: leadPai.decisor || '',
         valor: 0,
         potencial: leadPai.potencial || 'B',
+        classificacao: leadPai.classificacao || 'outros',
         etapa: 'leads',
         observacoes: `Nova oportunidade vinculada ao cliente ${leadPai.codigoUnico}`,
         dataCriacao: new Date().toISOString(),

@@ -23,6 +23,22 @@ const CONFIG = {
 // ============================================
 // CONSTANTES DE DOMÍNIO
 // ============================================
+const CLASSIFICACOES_LEAD = [
+    { id: 'consumidor', label: 'Consumidor', cor: '#1e7b85', bg: 'rgba(30, 123, 133, 0.15)' },
+    { id: 'revendedor', label: 'Revendedor', cor: '#2f7d5b', bg: 'rgba(47, 125, 91, 0.15)' },
+    { id: 'distribuidor', label: 'Distribuidor', cor: '#a9761f', bg: 'rgba(169, 118, 31, 0.15)' },
+    { id: 'industrializacao', label: 'Industrialização', cor: '#7b4397', bg: 'rgba(123, 67, 151, 0.15)' },
+    { id: 'outros', label: 'Outros', cor: '#607286', bg: 'rgba(96, 114, 134, 0.15)' }
+];
+
+const CLASSIFICACAO_NOMES = {
+    consumidor: 'Consumidor',
+    revendedor: 'Revendedor',
+    distribuidor: 'Distribuidor',
+    industrializacao: 'Industrialização',
+    outros: 'Outros'
+};
+
 const ETAPAS = [
     { id: 'leads', label: 'Leads', cor: '#2d4863' },
     { id: 'qualificacao', label: 'Qualificação', cor: '#3c6e91' },
@@ -62,6 +78,10 @@ const CSV_MAP = {
     'valor': 'valor',
     'potencial': 'potencial',
     'etapa': 'etapa',
+    'classificacao': 'classificacao',
+    'classificação': 'classificacao',
+    'tipo': 'classificacao',
+    'categoria': 'classificacao',
     'observacoes': 'observacoes',
     'observacao': 'observacoes'
 };

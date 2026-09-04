@@ -393,6 +393,7 @@ function whatsappOpcoesModelo() {
 function whatsappFiltrosFila() {
     return {
         etapa: document.getElementById('wFilaEtapa')?.value || '',
+        classificacao: document.getElementById('wFilaClassificacao')?.value || '',
         potencial: document.getElementById('wFilaPotencial')?.value || '',
         usuarioId: document.getElementById('wFilaVendedor')?.value || '',
         estado: (document.getElementById('wFilaEstado')?.value || '').trim().toLowerCase(),
@@ -402,6 +403,7 @@ function whatsappFiltrosFila() {
 
 function whatsappLeadCombinaFiltros(lead, filtros) {
     if (filtros.etapa && lead.etapa !== filtros.etapa) return false;
+    if (filtros.classificacao && (lead.classificacao || 'outros') !== filtros.classificacao) return false;
     if (filtros.potencial && lead.potencial !== filtros.potencial) return false;
     if (filtros.usuarioId && String(lead.usuarioId || '') !== String(filtros.usuarioId)) return false;
     if (filtros.estado && String(lead.estado || '').trim().toLowerCase() !== filtros.estado) return false;
@@ -421,6 +423,7 @@ function whatsappLeadsSegmento(filtros, incluirSemConsentimento = false) {
 }
 
 function whatsappFilaVariaveis(conteudo, lead) {
+    const classifTexto = typeof CLASSIFICACAO_NOMES !== 'undefined' && CLASSIFICACAO_NOMES[lead.classificacao] ? CLASSIFICACAO_NOMES[lead.classificacao] : (lead.classificacao || 'Outros');
     return String(conteudo || '')
         .replace(/\{\{empresa\}\}/g, lead.empresa || '')
         .replace(/\{\{decisor\}\}/g, lead.decisor || '')
@@ -428,7 +431,8 @@ function whatsappFilaVariaveis(conteudo, lead) {
         .replace(/\{\{telefone\}\}/g, lead.telefone || '')
         .replace(/\{\{cidade\}\}/g, lead.cidade || '')
         .replace(/\{\{estado\}\}/g, lead.estado || '')
-        .replace(/\{\{potencial\}\}/g, lead.potencial || '');
+        .replace(/\{\{potencial\}\}/g, lead.potencial || '')
+        .replace(/\{\{classificacao\}\}/g, classifTexto);
 }
 
 function whatsappFilaAtualizarVendedores() {
@@ -468,10 +472,11 @@ function whatsappFilaRenderizarCandidatos() {
         <div class="table-wrapper w-fila-table-wrap"><table class="w-fila-table"><thead><tr><th>Empresa</th><th>Contato</th><th>Segmento</th><th>Consentimento</th><th>Ação</th></tr></thead><tbody>
             ${visiveis.map(lead => {
                 const consentiu = whatsappTemConsentimento(lead.id);
+                const classifTexto = typeof CLASSIFICACAO_NOMES !== 'undefined' && CLASSIFICACAO_NOMES[lead.classificacao] ? CLASSIFICACAO_NOMES[lead.classificacao] : (lead.classificacao || 'Outros');
                 return `<tr>
                     <td><strong>${whatsappEscapar(lead.empresa)}</strong><div class="text-xs text-muted">${whatsappEscapar(lead.cidade || '—')}/${whatsappEscapar(lead.estado || '—')}</div></td>
                     <td>${whatsappEscapar(lead.decisor || '—')}<div class="text-xs text-muted">${whatsappEscapar(lead.whatsapp || lead.telefone)}</div></td>
-                    <td>${whatsappEscapar(ETAPA_NOMES[lead.etapa] || lead.etapa)}<div class="text-xs text-muted">Potencial ${whatsappEscapar(lead.potencial || '—')} • ${whatsappEscapar(usuarioMap.get(lead.usuarioId) || 'Sem responsável')}</div></td>
+                    <td>${whatsappEscapar(ETAPA_NOMES[lead.etapa] || lead.etapa)} • <span class="badge-classificacao badge-classificacao-${whatsappEscapar(lead.classificacao || 'outros')}">${whatsappEscapar(classifTexto)}</span><div class="text-xs text-muted">Potencial ${whatsappEscapar(lead.potencial || '—')} • ${whatsappEscapar(usuarioMap.get(lead.usuarioId) || 'Sem responsável')}</div></td>
                     <td><span class="w-consent-badge ${consentiu ? 'ok' : 'pendente'}">${consentiu ? 'Autorizado' : 'Não autorizado'}</span></td>
                     <td>${consentiu
                         ? `<button class="btn btn-outline btn-xs" onclick="whatsappRemoverConsentimento('${whatsappEscapar(lead.id)}')">Remover</button>`

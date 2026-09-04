@@ -184,19 +184,22 @@ function previsualizarEnvio() {
     const modelo = modelos.find(m => m.id === modeloId);
     if (!modelo) return;
 
+    const classifTexto = typeof CLASSIFICACAO_NOMES !== 'undefined' && CLASSIFICACAO_NOMES[lead.classificacao] ? CLASSIFICACAO_NOMES[lead.classificacao] : (lead.classificacao || 'Outros');
     let assunto = modelo.assunto
         .replace(/\{\{empresa\}\}/g, lead.empresa || '')
         .replace(/\{\{decisor\}\}/g, lead.decisor || '')
         .replace(/\{\{valor\}\}/g, formatarMoeda(lead.valor || 0))
         .replace(/\{\{email\}\}/g, lead.email || '')
-        .replace(/\{\{telefone\}\}/g, lead.telefone || '');
+        .replace(/\{\{telefone\}\}/g, lead.telefone || '')
+        .replace(/\{\{classificacao\}\}/g, classifTexto);
 
     let conteudo = modelo.conteudo
         .replace(/\{\{empresa\}\}/g, lead.empresa || '')
         .replace(/\{\{decisor\}\}/g, lead.decisor || '')
         .replace(/\{\{valor\}\}/g, formatarMoeda(lead.valor || 0))
         .replace(/\{\{email\}\}/g, lead.email || '')
-        .replace(/\{\{telefone\}\}/g, lead.telefone || '');
+        .replace(/\{\{telefone\}\}/g, lead.telefone || '')
+        .replace(/\{\{classificacao\}\}/g, classifTexto);
 
     document.getElementById('envioAssunto').value = assunto;
     document.getElementById('envioConteudo').value = conteudo;

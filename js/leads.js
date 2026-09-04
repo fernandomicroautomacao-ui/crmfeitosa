@@ -7,6 +7,7 @@ function abrirModalLead(leadId) {
     document.getElementById('leadId').value = '';
     document.getElementById('fPotencial').value = 'B';
     document.getElementById('fEtapa').value = 'leads';
+    if (document.getElementById('fClassificacao')) document.getElementById('fClassificacao').value = 'outros';
 
     if (leadId) {
         const lead = leads.find(l => l.id === leadId);
@@ -26,6 +27,7 @@ function abrirModalLead(leadId) {
         document.getElementById('fWhatsApp').value = lead.whatsapp || '';
         document.getElementById('fEmail').value = lead.email || '';
         document.getElementById('fPotencial').value = lead.potencial || 'B';
+        if (document.getElementById('fClassificacao')) document.getElementById('fClassificacao').value = lead.classificacao || 'outros';
         document.getElementById('fCidade').value = lead.cidade || '';
         document.getElementById('fEstado').value = lead.estado || '';
         document.getElementById('fEtapa').value = lead.etapa || 'leads';
@@ -80,6 +82,7 @@ function salvarLead(event) {
         cidade: document.getElementById('fCidade').value.trim(),
         estado: document.getElementById('fEstado').value.trim(),
         potencial: document.getElementById('fPotencial').value,
+        classificacao: document.getElementById('fClassificacao')?.value || 'outros',
         etapa: document.getElementById('fEtapa').value,
         observacoes: document.getElementById('fObservacoes').value.trim()
     };
