@@ -95,10 +95,20 @@ function abrirModalCampanha(campanhaId = null) {
                 opt.selected = campanha.alvo.includes(opt.value);
             }
         }
+        if (campanha.classificacoes && document.getElementById('cClassificacao')) {
+            const opts = document.getElementById('cClassificacao').options;
+            for (let opt of opts) {
+                opt.selected = campanha.classificacoes.includes(opt.value);
+            }
+        }
     } else {
         document.getElementById('campanhaModalTitle').textContent = 'Nova Campanha';
         document.getElementById('campanhaId').value = '';
         document.getElementById('cStatus').value = 'ativa';
+        if (document.getElementById('cClassificacao')) {
+            const opts = document.getElementById('cClassificacao').options;
+            for (let opt of opts) opt.selected = false;
+        }
     }
 
     abrirModal('campanhaModal');
@@ -117,6 +127,9 @@ function salvarCampanha(event) {
     const alvoSelect = document.getElementById('cAlvo');
     const alvo = Array.from(alvoSelect.selectedOptions).map(opt => opt.value);
 
+    const classifSelect = document.getElementById('cClassificacao');
+    const classificacoes = classifSelect ? Array.from(classifSelect.selectedOptions).map(opt => opt.value) : [];
+
     if (!nome || !modeloId) {
         showToast('Preencha nome e modelo!', 'error');
         return;
@@ -126,7 +139,7 @@ function salvarCampanha(event) {
         const index = campanhas.findIndex(c => c.id === id);
         if (index !== -1) {
             campanhas[index] = { ...campanhas[index], nome, modeloId, status, dataInicio, dataFim, descricao,
-                alvo };
+                alvo, classificacoes };
             showToast('Campanha atualizada!');
         }
     } else {
@@ -139,6 +152,7 @@ function salvarCampanha(event) {
             dataFim,
             descricao,
             alvo,
+            classificacoes,
             criadaEm: new Date().toISOString(),
             emailsEnviados: 0,
             usuarioId: usuarioAtual.id
@@ -179,11 +193,12 @@ async function executarCampanha(id) {
     // Filtrar leads (apenas os visíveis)
     let alvos = [];
     const leadsVisiveis = getLeadsVisiveis();
-    if (campanha.alvo && campanha.alvo.length > 0) {
-        alvos = leadsVisiveis.filter(l => campanha.alvo.includes(l.etapa) && l.email);
-    } else {
-        alvos = leadsVisiveis.filter(l => l.email);
-    }
+    alvos = leadsVisiveis.filter(l => {
+        if (!l.email) return false;
+        if (campanha.alvo && campanha.alvo.length > 0 && !campanha.alvo.includes(l.etapa)) return false;
+        if (campanha.classificacoes && campanha.classificacoes.length > 0 && !campanha.classificacoes.includes(l.classificacao || 'outros')) return false;
+        return true;
+    });
 
     if (alvos.length === 0) {
         showToast('Nenhum lead com email encontrado!', 'warning');
@@ -202,19 +217,22 @@ async function executarCampanha(id) {
     if (progressoEl) progressoEl.style.display = 'block';
 
     for (const lead of alvos) {
+        const classifTexto = typeof CLASSIFICACAO_NOMES !== 'undefined' && CLASSIFICACAO_NOMES[lead.classificacao] ? CLASSIFICACAO_NOMES[lead.classificacao] : (lead.classificacao || 'Outros');
         let assunto = modelo.assunto
             .replace(/\{\{empresa\}\}/g, lead.empresa || '')
             .replace(/\{\{decisor\}\}/g, lead.decisor || '')
             .replace(/\{\{valor\}\}/g, formatarMoeda(lead.valor || 0))
             .replace(/\{\{email\}\}/g, lead.email || '')
-            .replace(/\{\{telefone\}\}/g, lead.telefone || '');
+            .replace(/\{\{telefone\}\}/g, lead.telefone || '')
+            .replace(/\{\{classificacao\}\}/g, classifTexto);
 
         let conteudo = modelo.conteudo
             .replace(/\{\{empresa\}\}/g, lead.empresa || '')
             .replace(/\{\{decisor\}\}/g, lead.decisor || '')
             .replace(/\{\{valor\}\}/g, formatarMoeda(lead.valor || 0))
             .replace(/\{\{email\}\}/g, lead.email || '')
-            .replace(/\{\{telefone\}\}/g, lead.telefone || '');
+            .replace(/\{\{telefone\}\}/g, lead.telefone || '')
+            .replace(/\{\{classificacao\}\}/g, classifTexto);
 
         let result = null;
         if (provedor === 'google') {
@@ -322,7 +340,10 @@ function renderizarMarketing() {
             const statusLabel = c.status === 'ativa' ? 'Ativa' : c.status === 'pausada' ? 'Pausada' :
                 'Finalizada';
             const alvoLabel = c.alvo && c.alvo.length > 0 ? c.alvo.map(e => ETAPA_NOMES[e] || e).join(', ') :
-                'Todos';
+                'Todas as etapas';
+            const classifLabel = c.classificacoes && c.classificacoes.length > 0
+                ? c.classificacoes.map(cl => (typeof CLASSIFICACAO_NOMES !== 'undefined' ? CLASSIFICACAO_NOMES[cl] : cl)).join(', ')
+                : 'Todas as classificações';
 
             return `
                 <div class="campaign-item">
@@ -331,7 +352,7 @@ function renderizarMarketing() {
                         <span class="campaign-status ${statusClass}">${statusLabel}</span>
                     </div>
                     <div class="campaign-details">
-                        Modelo: ${modelo ? modelo.nome : '—'} • Alvo: ${alvoLabel}
+                        Modelo: ${modelo ? modelo.nome : '—'} • Etapas: ${alvoLabel} • Classificação: ${classifLabel}
                         ${c.emailsEnviados !== undefined ? ` • ${c.emailsEnviados} enviados` : ''}
                     </div>
                     <div class="campaign-actions">

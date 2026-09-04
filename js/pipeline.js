@@ -29,16 +29,20 @@ function ordenarCardsPipeline(items, ordenacao) {
 
 function mudarFiltroPipeline() {
     const periodo = document.getElementById('pipelinePeriodo')?.value || 'todos';
+    const classificacao = document.getElementById('pipelineClassificacao')?.value || 'todas';
     const ordenacao = document.getElementById('pipelineOrdenacao')?.value || 'insercao';
-    localStorage.setItem('feitosaPipelineFiltrosV1', JSON.stringify({ periodo, ordenacao }));
+    localStorage.setItem('feitosaPipelineFiltrosV1', JSON.stringify({ periodo, classificacao, ordenacao }));
     renderizarPipeline();
 }
 
 function carregarFiltrosPipeline() {
     try {
         const saved = JSON.parse(localStorage.getItem('feitosaPipelineFiltrosV1') || '{}');
-        const periodo = document.getElementById('pipelinePeriodo'); const ordenacao = document.getElementById('pipelineOrdenacao');
+        const periodo = document.getElementById('pipelinePeriodo');
+        const classificacao = document.getElementById('pipelineClassificacao');
+        const ordenacao = document.getElementById('pipelineOrdenacao');
         if (periodo) periodo.value = saved.periodo || 'todos';
+        if (classificacao) classificacao.value = saved.classificacao || 'todas';
         if (ordenacao) ordenacao.value = saved.ordenacao || 'insercao';
     } catch (_) {}
 }
@@ -47,8 +51,12 @@ function renderizarPipeline() {
     const container = document.getElementById('pipelineContainer');
     carregarFiltrosPipeline();
     const periodo = document.getElementById('pipelinePeriodo')?.value || 'todos';
+    const classificacao = document.getElementById('pipelineClassificacao')?.value || 'todas';
     const ordenacao = document.getElementById('pipelineOrdenacao')?.value || 'insercao';
-    const leadsVisiveis = getLeadsVisiveis().filter(lead => leadNoPeriodoPipeline(lead, periodo));
+    let leadsVisiveis = getLeadsVisiveis().filter(lead => leadNoPeriodoPipeline(lead, periodo));
+    if (classificacao && classificacao !== 'todas') {
+        leadsVisiveis = leadsVisiveis.filter(lead => (lead.classificacao || 'outros') === classificacao);
+    }
     const ativos = leadsVisiveis.filter(l => l.etapa === 'oportunidades' || l.etapa === 'orcamento');
     const totalValor = ativos.reduce((acc, l) => acc + (l.valor || 0), 0);
 
@@ -81,6 +89,8 @@ function renderizarPipeline() {
                     const vendedorBadge = vendedor
                         ? `<div class="card-vendedor-badge" style="background:${corAvatar(vendedor.nome)};" title="Vendedor: ${vendedor.nome}">${iniciais(vendedor.nome)}</div>`
                         : '';
+                    const classifObj = CLASSIFICACOES_LEAD.find(c => c.id === (lead.classificacao || 'outros')) || CLASSIFICACOES_LEAD[4];
+                    const classifBadge = `<span class="card-classif-badge" style="color:${classifObj.cor};background:${classifObj.bg};border:1px solid ${classifObj.cor}33;" title="Classificação: ${classifObj.label}">${classifObj.label}</span>`;
                     return `
                     <div class="pipeline-card ${lead.etapa}"
                          draggable="true"
@@ -89,8 +99,11 @@ function renderizarPipeline() {
                         ${vendedorBadge}
                         <div class="card-title" style="margin:0;">${lead.empresa}</div>
                         <div class="card-sub">${lead.decisor || '—'} • ${lead.cidade || '—'}</div>
-                        <div style="font-weight:700;color:var(--stage-pedido);font-size:13px;margin-top:4px;">
-                            ${formatarMoeda(lead.valor || 0)}
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;">
+                            <span style="font-weight:700;color:var(--stage-pedido);font-size:13px;">
+                                ${formatarMoeda(lead.valor || 0)}
+                            </span>
+                            ${classifBadge}
                         </div>
                         ${lead.codigoUnico ? `<div class="card-badge">${lead.codigoUnico}</div>` : ''}
                         ${lead.autorizacaoPedidoStatus === 'assinado' ? `<div class="card-assinado-badge" title="Pedido assinado pelo cliente">✓ Pedido assinado</div>` : ''}

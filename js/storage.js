@@ -18,6 +18,7 @@ function leadParaLinhaSupabase(l) {
         decisor: l.decisor || '',
         valor: l.valor || 0,
         potencial: l.potencial || 'B',
+        classificacao: l.classificacao || 'outros',
         etapa: l.etapa || 'leads',
         observacoes: l.observacoes || '',
         data_criacao: l.dataCriacao || new Date().toISOString(),
@@ -58,6 +59,7 @@ function linhaSupabaseParaLead(r) {
         decisor: r.decisor,
         valor: r.valor,
         potencial: r.potencial,
+        classificacao: r.classificacao || 'outros',
         etapa: r.etapa,
         observacoes: r.observacoes,
         dataCriacao: r.data_criacao,
@@ -134,6 +136,7 @@ async function carregarDados() {
         if (!l.dataCriacao) l.dataCriacao = new Date().toISOString();
         if (!l.etapa) l.etapa = 'leads';
         if (!l.valor) l.valor = 0;
+        if (!l.classificacao) l.classificacao = 'outros';
         if (!l.itens) l.itens = [];
         if (!l.numeroPedido) l.numeroPedido = '';
         if (!l.obsOrcamento) l.obsOrcamento = '';
@@ -214,11 +217,16 @@ async function salvarDados() {
         const { error } = await supabaseClient.from('leads').upsert(linhas, { onConflict: 'id' });
         if (error) {
             console.error('Erro ao salvar leads no Supabase:', error);
-            if (/cnpj|column .* does not exist|schema cache/i.test(error.message || '')) {
-                const linhasCompatibilidade = linhas.map(linha => { const { cnpj, ...semCnpj } = linha; return semCnpj; });
+            if (/cnpj|classificacao|column .* does not exist|schema cache/i.test(error.message || '')) {
+                const linhasCompatibilidade = linhas.map(linha => {
+                    const clone = { ...linha };
+                    delete clone.cnpj;
+                    delete clone.classificacao;
+                    return clone;
+                });
                 const retry = await supabaseClient.from('leads').upsert(linhasCompatibilidade, { onConflict: 'id' });
                 if (retry.error) showToast('Erro ao salvar no banco de dados: ' + retry.error.message, 'error');
-                else showToast('Lead salvo. Para persistir CNPJ, aplique a migration do banco.', 'warning');
+                else showToast('Lead salvo. Para persistir novas colunas no Supabase, execute o script SQL de migração.', 'warning');
             } else {
                 showToast('Erro ao salvar no banco de dados: ' + error.message, 'error');
             }

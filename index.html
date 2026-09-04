@@ -257,6 +257,14 @@
             </div>
             <div class="toolbar-card">
                 <input type="search" id="centralSearch" placeholder="Buscar empresa, CNPJ, telefone ou decisor..." oninput="renderizarCentral()">
+                <select id="centralClassification" onchange="renderizarCentral()">
+                    <option value="">Todas as classificações</option>
+                    <option value="consumidor">Consumidor</option>
+                    <option value="revendedor">Revendedor</option>
+                    <option value="distribuidor">Distribuidor</option>
+                    <option value="industrializacao">Industrialização</option>
+                    <option value="outros">Outros</option>
+                </select>
                 <select id="centralPotential" onchange="renderizarCentral()"><option value="">Todos os potenciais</option><option value="A">Potencial A</option><option value="B">Potencial B</option><option value="C">Potencial C</option></select>
                 <select id="centralStage" onchange="renderizarCentral()"><option value="">Todas as etapas</option><option value="leads">Leads</option><option value="qualificacao">Qualificação</option><option value="oportunidades">Oportunidades</option><option value="orcamento">Orçamento</option><option value="pedido">Pedido</option></select>
             </div>
@@ -274,6 +282,16 @@
                     <label class="text-sm text-muted">Período:
                         <select id="pipelinePeriodo" onchange="mudarFiltroPipeline()" class="pipeline-filter-select">
                             <option value="todos">Todos</option><option value="hoje">Hoje</option><option value="7dias">Últimos 7 dias</option><option value="30dias">Últimos 30 dias</option><option value="mes">Este mês</option>
+                        </select>
+                    </label>
+                    <label class="text-sm text-muted">Classificação:
+                        <select id="pipelineClassificacao" onchange="mudarFiltroPipeline()" class="pipeline-filter-select">
+                            <option value="todas">Todas</option>
+                            <option value="consumidor">Consumidor</option>
+                            <option value="revendedor">Revendedor</option>
+                            <option value="distribuidor">Distribuidor</option>
+                            <option value="industrializacao">Industrialização</option>
+                            <option value="outros">Outros</option>
                         </select>
                     </label>
                     <label class="text-sm text-muted">Ordenar:
@@ -457,6 +475,7 @@
                     <div class="form-group"><label>Nome da campanha</label><input id="wFilaNome" placeholder="Ex.: Reativação de oportunidades"></div>
                     <div class="form-group"><label>Limite diário de confirmações</label><input type="number" id="wFilaLimite" value="30" min="1" max="100"></div>
                     <div class="form-group"><label>Etapa</label><select id="wFilaEtapa" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todas as etapas</option><option value="leads">Leads</option><option value="qualificacao">Qualificação</option><option value="oportunidades">Oportunidades</option><option value="orcamento">Orçamento</option><option value="pedido">Pedido</option></select></div>
+                    <div class="form-group"><label>Classificação</label><select id="wFilaClassificacao" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todas as classificações</option><option value="consumidor">Consumidor</option><option value="revendedor">Revendedor</option><option value="distribuidor">Distribuidor</option><option value="industrializacao">Industrialização</option><option value="outros">Outros</option></select></div>
                     <div class="form-group"><label>Potencial</label><select id="wFilaPotencial" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todos</option><option value="A">A — Alto</option><option value="B">B — Médio</option><option value="C">C — Baixo</option></select></div>
                     <div class="form-group"><label>Vendedor</label><select id="wFilaVendedor" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todos os vendedores</option></select></div>
                     <div class="form-group"><label>Estado</label><input id="wFilaEstado" placeholder="Ex.: SP" oninput="whatsappFilaRenderizarCandidatos()"></div>
@@ -645,6 +664,14 @@
             <div id="clientesSubLista">
                 <div class="filters">
                     <input type="text" id="searchInput" placeholder="Buscar cliente..." oninput="renderizarClientes()">
+                    <select id="filterClassificacao" onchange="renderizarClientes()">
+                        <option value="">Todas as classificações</option>
+                        <option value="consumidor">Consumidor</option>
+                        <option value="revendedor">Revendedor</option>
+                        <option value="distribuidor">Distribuidor</option>
+                        <option value="industrializacao">Industrialização</option>
+                        <option value="outros">Outros</option>
+                    </select>
                     <select id="filterPotencial" onchange="renderizarClientes()">
                         <option value="">Todos os potenciais</option>
                         <option value="A">A - Alto</option>
@@ -1335,6 +1362,16 @@
                             <option value="pedido">Pedido</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Classificação</label>
+                        <select id="fClassificacao">
+                            <option value="consumidor">Consumidor</option>
+                            <option value="revendedor">Revendedor</option>
+                            <option value="distribuidor">Distribuidor</option>
+                            <option value="industrializacao">Industrialização</option>
+                            <option value="outros" selected>Outros</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Observações</label>
@@ -1426,16 +1463,29 @@
                         <input type="date" id="cDataFim">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Público-Alvo (selecionar leads por etapa)</label>
-                    <select id="cAlvo" multiple style="height:80px;">
-                        <option value="leads">Leads</option>
-                        <option value="qualificacao">Qualificação</option>
-                        <option value="oportunidades">Oportunidades</option>
-                        <option value="orcamento">Orçamento</option>
-                        <option value="pedido">Pedido</option>
-                    </select>
-                    <span class="text-xs text-muted">Segure Ctrl para selecionar múltiplos</span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Público-Alvo por Etapa</label>
+                        <select id="cAlvo" multiple style="height:95px;">
+                            <option value="leads">Leads</option>
+                            <option value="qualificacao">Qualificação</option>
+                            <option value="oportunidades">Oportunidades</option>
+                            <option value="orcamento">Orçamento</option>
+                            <option value="pedido">Pedido</option>
+                        </select>
+                        <span class="text-xs text-muted">Ctrl para múltiplos (vazio = todas)</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Classificação dos Leads</label>
+                        <select id="cClassificacao" multiple style="height:95px;">
+                            <option value="consumidor">Consumidor</option>
+                            <option value="revendedor">Revendedor</option>
+                            <option value="distribuidor">Distribuidor</option>
+                            <option value="industrializacao">Industrialização</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                        <span class="text-xs text-muted">Ctrl para múltiplos (vazio = todas)</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Descrição</label>
