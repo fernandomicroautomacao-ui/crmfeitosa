@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feitosa CRM</title>
+    <meta name="description" content="Gestão de projetos e produtos, do lead ao pedido.">
+    <meta property="og:title" content="Feitosa CRM">
+    <meta property="og:description" content="Gestão de projetos e produtos, do lead ao pedido.">
+    <link rel="icon" id="dynamicFavicon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#22384d">
+</head>
+<body>
+
+    <!-- ============ TELA DE LOGIN ============ -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card" id="loginCard">
+            <div class="login-brand">
+                <div class="login-brand-logo" data-company-logo><span class="logo-mark">FC</span></div> <span data-company-name>Feitosa</span><small>CRM</small>
+                <h2>Gestão de projetos e produtos, do lead ao pedido.</h2>
+                <ul class="login-brand-list">
+                    <li><span class="icon-sm" data-icone="pipeline"></span> Pipeline visual por etapas</li>
+                    <li><span class="icon-sm" data-icone="calendario"></span> Calendário de tarefas e atividades</li>
+                    <li><span class="icon-sm" data-icone="relatorios"></span> Metas de vendas por período</li>
+                    <li><span class="icon-sm" data-icone="clientes"></span> Relacionamento com clientes A/B/C</li>
+                </ul>
+            </div>
+            <div class="login-box">
+                <div class="login-logo-mobile" data-company-logo><span class="logo-mark">FC</span></div> <span data-company-name>Feitosa</span><small>CRM</small>
+                <h1 class="login-title">Bem-vindo de volta</h1>
+                <p class="login-sub">Entre com sua conta para continuar</p>
+                <form id="loginForm" onsubmit="fazerLogin(event)">
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <div class="login-password-wrap">
+                            <input type="password" id="loginSenha" placeholder="••••••••" required>
+                            <button type="button" class="login-password-toggle" onclick="alternarVisibilidadeSenha()" id="btnToggleSenha" title="Mostrar senha"><span data-icone="olho"></span></button>
+                        </div>
+                    </div>
+                    <div class="login-error" id="loginError" style="display:none;"></div>
+                    <button type="submit" class="login-submit">Entrar →</button>
+                </form>
+                <div class="login-hint">Use as credenciais fornecidas pelo administrador do sistema.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-wrapper" id="appWrapper">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo" data-company-logo>
+            <span class="logo-mark">FC</span>
+        </div>
+        <div class="sidebar-company-name" data-company-name>Feitosa CRM</div>
+        <nav aria-label="Navegação principal">
+            <div class="nav-section-title">Visão geral</div>
+            <a class="active" data-section="dashboard">
+                <span class="icon" data-icone="dashboard"></span>
+                <span class="label">Dashboard</span>
+            </a>
+            <a data-section="pipeline">
+                <span class="icon" data-icone="pipeline"></span>
+                <span class="label">Pipeline</span>
+                <span class="badge" id="pipelineCount">0</span>
+            </a>
+            <a data-section="central">
+                <span class="icon" data-icone="clientes"></span>
+                <span class="label">Central 360º</span>
+            </a>
+            <div class="nav-section-title">Relacionamento</div>
+            <a data-section="marketing">
+                <span class="icon" data-icone="marketing"></span>
+                <span class="label">Marketing</span>
+                <span class="badge marketing-badge" id="marketingCount">0</span>
+            </a>
+            <a data-section="whatsapp">
+                <span class="icon" data-icone="whatsapp"></span>
+                <span class="label">WhatsApp</span>
+                <span class="badge" id="whatsappCount">0</span>
+            </a>
+            <a data-section="coletor">
+                <span class="icon" data-icone="coletor"></span>
+                <span class="label">Coletor de Leads</span>
+                <span class="badge" id="coletorCount">0</span>
+            </a>
+            <a data-section="calendario">
+                <span class="icon" data-icone="calendario"></span>
+                <span class="label">Calendário</span>
+                <span class="badge" id="calendarioCount">0</span>
+            </a>
+            <a data-section="comunicacao">
+                <span class="icon" data-icone="comunicacao"></span>
+                <span class="label">Comunicação</span>
+                <span class="badge" id="comunicacaoCount">0</span>
+            </a>
+            <a data-section="clientes">
+                <span class="icon" data-icone="clientes"></span>
+                <span class="label">Clientes</span>
+                <span class="badge" id="clientCount">0</span>
+            </a>
+            <div class="nav-section-title">Gestão</div>
+            <a data-section="relatorios">
+                <span class="icon" data-icone="relatorios"></span>
+                <span class="label">Relatórios</span>
+            </a>
+            <a data-section="financeiro">
+                <span class="icon" data-icone="valor"></span>
+                <span class="label">Financeiro e Comissões</span>
+            </a>
+            <a data-section="historico">
+                <span class="icon" data-icone="historico"></span>
+                <span class="label">Histórico</span>
+            </a>
+            <a data-section="importar">
+                <span class="icon" data-icone="importar"></span>
+                <span class="label">Importar</span>
+            </a>
+            <a data-section="exportar">
+                <span class="icon" data-icone="exportar"></span>
+                <span class="label">Exportar</span>
+            </a>
+            <a data-section="automacao">
+                <span class="icon" data-icone="marketing"></span>
+                <span class="label">Automação e IA</span>
+            </a>
+            <div class="nav-section-title nav-admin-group" id="navAdminGroup" style="display:none;">Administração</div>
+            <a data-section="admin" id="navAdmin" style="display:none;">
+                <span class="icon" data-icone="admin"></span>
+                <span class="label">Administração</span>
+            </a>
+        </nav>
+        <div class="sidebar-user" id="sidebarUser">
+            <div class="avatar-circle" id="userAvatar">?</div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name" id="userNome">—</div>
+                <a href="#" onclick="logout();return false;" class="sidebar-logout">Sair</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="header">
+            <div class="header-title-wrap">
+                <button class="mobile-nav-toggle" onclick="toggleSidebar()" aria-label="Abrir menu" title="Abrir menu">☰</button>
+                <h1 id="pageTitle"><span class="page-title-icon" data-icone="dashboard"></span> Dashboard</h1>
+            </div>
+            <div class="header-actions">
+                <div class="global-search-wrap">
+                    <input type="search" id="globalSearchInput" placeholder="Buscar lead ou cliente..." autocomplete="off">
+                    <div class="global-search-results" id="globalSearchResults"></div>
+                </div>
+                <button class="btn btn-primary" onclick="abrirModalLead()">Novo Lead</button>
+                <div id="adminFilterContainer" style="display:none; align-items:center; gap:8px;">
+                    <label style="font-size:12px;color:var(--text-muted);">Filtrar por:</label>
+                    <select id="filtroUsuarioAdmin" style="padding:6px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);font-size:12px;">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <span class="header-role" id="headerUserRole"></span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema"><span data-icone="tema"></span></button>
+            </div>
+        </div>
+
+        <!-- ============ DASHBOARD ============ -->
+        <section class="section active" id="section-dashboard">
+            <div class="funil-container" style="margin-bottom:24px;">
+                <div class="funil-title"><span class="icon-sm" data-icone="lembrete"></span> Meu Dia</div>
+                <div class="meu-dia-container" id="meuDiaContainer">
+                    <div class="empty-state compact">
+                        <span class="emoji-big" data-icone="lembrete"></span>
+                        <p class="text-sm">Carregando...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-start-card" id="quickStartCard">
+                <div class="quick-start-copy">
+                    <span class="quick-start-kicker">Próximo passo</span>
+                    <h2>Organize seu próximo negócio</h2>
+                    <p>Cadastre um lead, registre uma atividade ou consulte as oportunidades em andamento.</p>
+                </div>
+                <div class="quick-start-actions">
+                    <button class="btn btn-primary" onclick="abrirModalLead()">+ Novo lead</button>
+                    <button class="btn btn-outline" onclick="navegarPara('pipeline')">Ver pipeline</button>
+                    <button class="btn btn-outline" onclick="navegarPara('calendario')">Agenda do dia</button>
+                </div>
+            </div>
+
+            <div class="dashboard-cards" id="dashboardCards">
+                <div class="stat-card total">
+                    <span class="icon-badge" data-icone="pipeline"></span>
+                    <div class="label">Total de Leads</div>
+                    <div class="value" id="totalLeads">0</div>
+                </div>
+                <div class="stat-card clientes">
+                    <span class="icon-badge" data-icone="clientes"></span>
+                    <div class="label">Clientes</div>
+                    <div class="value" id="totalClientes">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="icon-badge" data-icone="marketing"></span>
+                    <div class="label">Emails Enviados</div>
+                    <div class="value" id="totalEmailsEnviados">0</div>
+                </div>
+                <div class="stat-card leads">
+                    <span class="icon-dot" style="background:var(--stage-leads);"></span>
+                    <div class="label">Leads</div>
+                    <div class="value" id="totalLeadsEtapa">0</div>
+                </div>
+                <div class="stat-card qualificacao">
+                    <span class="icon-dot" style="background:var(--stage-qualificacao);"></span>
+                    <div class="label">Qualificação</div>
+                    <div class="value" id="totalQualificacao">0</div>
+                </div>
+                <div class="stat-card oportunidades">
+                    <span class="icon-dot" style="background:var(--stage-oportunidades);"></span>
+                    <div class="label">Oportunidades</div>
+                    <div class="value" id="totalOportunidades">0</div>
+                </div>
+                <div class="stat-card orcamento">
+                    <span class="icon-dot" style="background:var(--stage-orcamento);"></span>
+                    <div class="label">Orçamentos</div>
+                    <div class="value" id="totalOrcamento">0</div>
+                    <div class="sub" id="totalOrcamentoValor">R$ 0</div>
+                </div>
+                <div class="stat-card pedido">
+                    <span class="icon-dot" style="background:var(--stage-pedido);"></span>
+                    <div class="label">Pedidos (Mês)</div>
+                    <div class="value" id="totalPedido">0</div>
+                    <div class="sub" id="totalPedidoValor">R$ 0</div>
+                </div>
+                <div class="stat-card valor">
+                    <span class="icon-badge" data-icone="valor"></span>
+                    <div class="label">Valor Oportunidades</div>
+                    <div class="value" id="valorPipeline">R$ 0</div>
+                    <div class="sub" id="pipelinePrevisao"></div>
+                </div>
+            </div>
+
+            <div class="funil-container">
+                <div class="funil-title"><span class="icon-sm" data-icone="dashboard"></span> Funil de Vendas</div>
+                <div id="funilItens"></div>
+            </div>
+        </section>
+
+        <!-- ============ CENTRAL 360º ============ -->
+        <section class="section" id="section-central">
+            <div class="section-heading-row">
+                <div><h3>Central 360º</h3><p class="text-muted">Empresas, contatos, negócios, atividades e histórico em um único lugar.</p></div>
+                <button class="btn btn-primary" onclick="abrirModalLead()">+ Nova oportunidade</button>
+            </div>
+            <div class="toolbar-card">
+                <input type="search" id="centralSearch" placeholder="Buscar empresa, CNPJ, telefone ou decisor..." oninput="renderizarCentral()">
+                <select id="centralPotential" onchange="renderizarCentral()"><option value="">Todos os potenciais</option><option value="A">Potencial A</option><option value="B">Potencial B</option><option value="C">Potencial C</option></select>
+                <select id="centralStage" onchange="renderizarCentral()"><option value="">Todas as etapas</option><option value="leads">Leads</option><option value="qualificacao">Qualificação</option><option value="oportunidades">Oportunidades</option><option value="orcamento">Orçamento</option><option value="pedido">Pedido</option></select>
+            </div>
+            <div class="central-layout"><div id="centralCompanyList" class="central-company-list"></div><div id="centralCompanyDetail" class="central-company-detail"><div class="empty-state"><span data-icone="clientes"></span><p>Selecione uma empresa para ver a ficha completa.</p></div></div></div>
+        </section>
+
+        <!-- ============ PIPELINE ============ -->
+        <section class="section" id="section-pipeline">
+            <div class="pipeline-header">
+                <div>
+                    <h3 style="font-size:18px;font-weight:700;">Pipeline de Vendas</h3>
+                    <p class="text-muted" style="font-size:13px;">Arraste os cards entre as etapas para atualizar o funil</p>
+                </div>
+                <div class="pipeline-toolbar flex gap-8 flex-wrap" style="align-items:center;">
+                    <label class="text-sm text-muted">Período:
+                        <select id="pipelinePeriodo" onchange="mudarFiltroPipeline()" class="pipeline-filter-select">
+                            <option value="todos">Todos</option><option value="hoje">Hoje</option><option value="7dias">Últimos 7 dias</option><option value="30dias">Últimos 30 dias</option><option value="mes">Este mês</option>
+                        </select>
+                    </label>
+                    <label class="text-sm text-muted">Ordenar:
+                        <select id="pipelineOrdenacao" onchange="mudarFiltroPipeline()" class="pipeline-filter-select">
+                            <option value="insercao">Ordem de inserção</option><option value="alfabetica">Alfabética</option><option value="valor">Maior valor</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="total-valor">
+                    Oportunidades: <strong id="pipelineValorTotal">R$ 0</strong>
+                    <span class="text-muted" style="font-size:12px;margin-left:12px;" id="pipelineQtdOportunidades"></span>
+                </div>
+            </div>
+            <div class="pipeline-container" id="pipelineContainer"></div>
+        </section>
+
+        <!-- ============ FINANCEIRO ============ -->
+        <section class="section" id="section-financeiro">
+            <div class="section-heading-row"><div><h3>Financeiro e Comissões</h3><p class="text-muted">Acompanhe faturamento, recebimentos, comissão prevista e comissão paga.</p></div><button class="btn btn-outline" onclick="exportarFinanceiroCSV()">Exportar CSV</button></div>
+            <div id="financeAlerts"></div><div class="dashboard-cards finance-metrics"><div class="stat-card valor"><div class="label">Faturamento total</div><div class="value" id="financeRevenue">R$ 0,00</div></div><div class="stat-card pedido"><div class="label">Comissão prevista</div><div class="value" id="financeCommission">R$ 0,00</div></div><div class="stat-card clientes"><div class="label">Pedidos registrados</div><div class="value" id="financeOrders">0</div></div><div class="stat-card orcamento"><div class="label">Pendências</div><div class="value" id="financePending">0</div></div></div>
+            <div class="finance-grid"><div class="marketing-card"><div class="card-header"><h3>Regra de comissão</h3></div><p class="text-muted text-sm">O percentual padrão só é uma sugestão. Cada pedido deve ter o percentual e o valor da comissão confirmados. Depois, informe pagamentos parciais ou integrais.</p><div class="inline-form"><input id="defaultCommissionRate" type="number" min="0" max="100" step="0.1" placeholder="% comissão"><button class="btn btn-primary btn-sm" onclick="salvarRegraComissao()">Salvar regra</button></div><div id="commissionRuleStatus" class="text-muted text-sm"></div></div><div class="marketing-card"><div class="card-header"><h3>Comissões por pedido</h3></div><div id="commissionTableWrap"></div></div></div>
+        </section>
+
+        <!-- ============ MARKETING ============ -->
+        <section class="section" id="section-marketing">
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Email Marketing</h3>
+            <p class="text-muted mb-16">Gerencie modelos, campanhas e integrações com Gmail e Outlook via API</p>
+
+            <!-- Métricas de Marketing -->
+            <div class="dashboard-cards" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="marketing"></span></span>
+                    <div class="label">Campanhas</div>
+                    <div class="value" id="totalCampanhas">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="nota"></span></span>
+                    <div class="label">Modelos</div>
+                    <div class="value" id="totalModelos">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="exportar"></span></span>
+                    <div class="label">Enviados (Hoje)</div>
+                    <div class="value" id="totalEnviadosHoje">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="dashboard"></span></span>
+                    <div class="label">Taxa Abertura</div>
+                    <div class="value" id="taxaAbertura">0%</div>
+                </div>
+            </div>
+
+            <!-- Integrações -->
+            <div class="funil-container" style="margin-bottom:16px;">
+                <div class="funil-title">Integrações de Email (API)</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div class="integration-card">
+                        <div class="integration-info">
+                            <span class="provider-icon" data-icone="marketing"></span>
+                            <div>
+                                <div class="provider-name">Gmail API</div>
+                                <div class="provider-email" id="gmailUserEmail">Não conectado</div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm" onclick="conectarGmail()" id="btnGmail">
+                                Conectar
+                            </button>
+                            <span id="gmailStatus" class="integration-status disconnected">
+                                <span class="status-dot offline"></span> Desconectado
+                            </span>
+                        </div>
+                    </div>
+                    <div class="integration-card">
+                        <div class="integration-info">
+                            <span class="provider-icon" data-icone="marketing"></span>
+                            <div>
+                                <div class="provider-name">Outlook API (Microsoft Graph)</div>
+                                <div class="provider-email" id="outlookUserEmail">Não conectado</div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-info btn-sm" onclick="conectarOutlook()" id="btnOutlook">
+                                Conectar
+                            </button>
+                            <span id="outlookStatus" class="integration-status disconnected">
+                                <span class="status-dot offline"></span> Desconectado
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+                    <strong>Configuração necessária:</strong> Substitua os CLIENT_ID e TENANT_ID no arquivo js/config.js com os valores do seu app.
+                    <br><a href="#" onclick="mostrarGuiaConfig()" style="color:var(--stage-leads);">Ver guia de configuração</a>
+                </div>
+            </div>
+
+            <div class="marketing-grid">
+                <!-- Modelos de Email -->
+                <div class="marketing-card">
+                    <div class="card-header">
+                        <h3>Modelos de Email</h3>
+                        <button class="btn btn-pink btn-sm" onclick="abrirModalModelo()">+ Novo</button>
+                    </div>
+                    <div id="modelosList">
+                        <div class="empty-state compact">
+                            <span class="emoji-big"><span data-icone="nota"></span></span>
+                            <p class="text-sm">Nenhum modelo criado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campanhas -->
+                <div class="marketing-card">
+                    <div class="card-header">
+                        <h3>Campanhas</h3>
+                        <button class="btn btn-pink btn-sm" onclick="abrirModalCampanha()">+ Nova</button>
+                    </div>
+                    <div id="campanhasList">
+                        <div class="empty-state compact">
+                            <span class="emoji-big"><span data-icone="marketing"></span></span>
+                            <p class="text-sm">Nenhuma campanha criada</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log de Envios -->
+                <div class="marketing-card">
+                    <div class="card-header">
+                        <h3>Log de Envios</h3>
+                        <span class="badge-count" id="logCount">0</span>
+                    </div>
+                    <div id="emailLogList">
+                        <div class="empty-state compact">
+                            <span class="emoji-big"><span data-icone="exportar"></span></span>
+                            <p class="text-sm">Nenhum email enviado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ WHATSAPP ============ -->
+        <section class="section" id="section-whatsapp">
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">WhatsApp</h3>
+            <p class="text-muted mb-16">Prepare mensagens com modelos e abra o WhatsApp Web/App já preenchido para enviar manualmente</p>
+
+            <!-- Métricas de WhatsApp -->
+            <div class="dashboard-cards" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="nota"></span></span>
+                    <div class="label">Modelos</div>
+                    <div class="value" id="totalModelosWhatsapp">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="whatsapp"></span></span>
+                    <div class="label">Aberturas (Hoje)</div>
+                    <div class="value" id="totalWhatsappHoje">0</div>
+                </div>
+                <div class="stat-card marketing">
+                    <span class="emoji-big"><span data-icone="dashboard"></span></span>
+                    <div class="label">Total no Histórico</div>
+                    <div class="value" id="totalWhatsappGeral">0</div>
+                </div>
+            </div>
+
+            <div class="funil-container" style="margin-bottom:16px;">
+                <div class="funil-title"><span class="icon-sm" data-icone="info"></span> Como funciona</div>
+                <div style="font-size:12px;color:var(--text-muted);">
+                    Este módulo usa links <strong>wa.me</strong>: ao clicar em "Abrir no WhatsApp", o WhatsApp Web ou o aplicativo abre com o número e a mensagem já preenchidos — o envio final é feito manualmente por você, com um clique. Não é necessário token, API paga ou configuração adicional.
+                    <br>O código do país usado é <code>55</code> (Brasil). Para alterar, edite <code>WHATSAPP_COUNTRY_CODE</code> em <code>js/config.js</code>.
+                </div>
+            </div>
+
+            <div class="whatsapp-fila-card">
+                <div class="card-header">
+                    <div><h3>Fila assistida de campanha</h3><p class="text-xs text-muted" style="margin:3px 0 0;">Prepare e acompanhe os contatos autorizados. Cada envio é aberto no WhatsApp para sua confirmação manual.</p></div>
+                    <span class="w-fila-badge-seguranca">Sem API • envio manual</span>
+                </div>
+                <div class="w-fila-config-grid">
+                    <div class="form-group"><label>Nome da campanha</label><input id="wFilaNome" placeholder="Ex.: Reativação de oportunidades"></div>
+                    <div class="form-group"><label>Limite diário de confirmações</label><input type="number" id="wFilaLimite" value="30" min="1" max="100"></div>
+                    <div class="form-group"><label>Etapa</label><select id="wFilaEtapa" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todas as etapas</option><option value="leads">Leads</option><option value="qualificacao">Qualificação</option><option value="oportunidades">Oportunidades</option><option value="orcamento">Orçamento</option><option value="pedido">Pedido</option></select></div>
+                    <div class="form-group"><label>Potencial</label><select id="wFilaPotencial" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todos</option><option value="A">A — Alto</option><option value="B">B — Médio</option><option value="C">C — Baixo</option></select></div>
+                    <div class="form-group"><label>Vendedor</label><select id="wFilaVendedor" onchange="whatsappFilaRenderizarCandidatos()"><option value="">Todos os vendedores</option></select></div>
+                    <div class="form-group"><label>Estado</label><input id="wFilaEstado" placeholder="Ex.: SP" oninput="whatsappFilaRenderizarCandidatos()"></div>
+                    <div class="form-group"><label>Cidade contém</label><input id="wFilaCidade" placeholder="Ex.: São Paulo" oninput="whatsappFilaRenderizarCandidatos()"></div>
+                    <div class="form-group"><label>Variação V1</label><select id="wFilaModeloV1"><option value="">Selecionar modelo</option></select></div>
+                    <div class="form-group"><label>Variação V2</label><select id="wFilaModeloV2"><option value="">Selecionar modelo</option></select></div>
+                    <div class="form-group"><label>Variação V3</label><select id="wFilaModeloV3"><option value="">Selecionar modelo</option></select></div>
+                </div>
+                <div class="form-group"><label>Mensagem personalizada opcional</label><textarea id="wFilaPersonalizada" rows="3" placeholder="Se preenchida, entra como uma variação adicional. Use {{empresa}}, {{decisor}}, {{cidade}} e outras tags disponíveis."></textarea></div>
+                <div class="w-fila-acoes-config"><button class="btn btn-outline btn-sm" onclick="whatsappFilaRenderizarCandidatos()">Atualizar contatos</button><button class="btn btn-primary btn-sm" onclick="whatsappFilaCriar()">Montar fila com autorizados</button></div>
+                <div class="w-fila-consentimento-nota"><strong>Consentimento:</strong> contatos entram na fila somente depois de serem marcados como autorizados na prévia abaixo. Use “Não contatar” quando houver pedido de opt-out.</div>
+                <div id="wFilaCandidatos" class="mt-12"></div>
+                <div class="w-fila-divider"></div>
+                <div class="card-header" style="padding:0 0 10px;"><div><h3>Fila atual</h3><p class="text-xs text-muted" style="margin:3px 0 0;">Abra, confirme, pule ou marque como não contatar.</p></div><div id="wFilaCampanhas"></div></div>
+                <div id="wFilaPainel"></div>
+            </div>
+
+            <div class="marketing-grid">
+                <!-- Modelos de Mensagem -->
+                <div class="marketing-card">
+                    <div class="card-header">
+                        <h3>Modelos de Mensagem</h3>
+                        <button class="btn btn-success btn-sm" onclick="abrirModalModeloWhatsapp()">+ Novo</button>
+                    </div>
+                    <div id="whatsappModelosList">
+                        <div class="empty-state compact">
+                            <span class="emoji-big"><span data-icone="whatsapp"></span></span>
+                            <p class="text-sm">Nenhum modelo criado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log de Aberturas -->
+                <div class="marketing-card">
+                    <div class="card-header">
+                        <h3>Histórico de Envios</h3>
+                        <span class="badge-count" id="whatsappLogCount">0</span>
+                    </div>
+                    <div id="whatsappLogList">
+                        <div class="empty-state compact">
+                            <span class="emoji-big"><span data-icone="whatsapp"></span></span>
+                            <p class="text-sm">Nenhuma mensagem registrada</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ COLETOR DE LEADS ============ -->
+        <section class="section" id="section-coletor">
+            <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Coletor de Leads</h3>
+            <p class="text-muted mb-16">Importe listas brutas (CSV de Google Contacts, planilhas exportadas, etc.), trate cada linha e promova os leads qualificados direto para o Pipeline do CRM</p>
+
+            <div class="dashboard-cards coletor-stats">
+                <div class="stat-card leads">
+                    <span class="icon-dot" style="background:var(--stage-leads);"></span>
+                    <div class="label">Linhas na Lista</div>
+                    <div class="value" id="coletorTotalLinhas">0</div>
+                </div>
+                <div class="stat-card oportunidades">
+                    <span class="icon-dot" style="background:var(--stage-oportunidades);"></span>
+                    <div class="label">Tratados</div>
+                    <div class="value" id="coletorTotalTratados">0</div>
+                </div>
+                <div class="stat-card pedido">
+                    <span class="icon-dot" style="background:var(--stage-pedido);"></span>
+                    <div class="label">Promovidos ao CRM</div>
+                    <div class="value" id="coletorTotalPromovidos">0</div>
+                </div>
+            </div>
+
+            <div class="sub-tabs mb-16" id="coletorAbas"></div>
+
+            <div class="filters mb-16">
+                <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                    Carregar CSV
+                    <input type="file" id="coletorCsvFile" accept=".csv" style="display:none" onchange="coletorCarregarCSV(event)">
+                </label>
+                <button class="btn btn-warning btn-sm" onclick="abrirModalBuscaMaps()">Buscar no Google Maps</button>
+                <button class="btn btn-success btn-sm" onclick="coletorPromoverParaCRM()">Promover Tratados para o CRM</button>
+                <button class="btn btn-outline btn-sm" onclick="coletorResetarPromovidos()">Resetar Promovidos</button>
+                <button class="btn btn-info btn-sm" onclick="coletorImprimirTratados()">Imprimir Tratados</button>
+                <button class="btn btn-primary btn-sm" onclick="coletorAbrirChamada(null)">Ligação Manual</button>
+                <button class="btn btn-danger btn-sm" onclick="coletorLimparListaAtual()">Limpar Lista</button>
+            </div>
+
+            <div class="filters mb-16">
+                <span class="text-sm font-bold">Ações em massa:</span>
+                <select id="coletorAcaoEmMassa" style="padding:8px 14px;border:1px solid var(--border-color);border-radius:20px;background:var(--bg-card);color:var(--text-primary);">
+                    <option value="">Selecione</option>
+                    <option value="tratar">Marcar como Tratado</option>
+                    <option value="destratar">Desmarcar Tratado</option>
+                    <option value="excluir">Excluir selecionados</option>
+                </select>
+                <button class="btn btn-outline btn-sm" onclick="coletorAplicarAcaoEmMassa()">Aplicar</button>
+            </div>
+
+            <div class="table-wrapper" id="dataTableColetorWrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="select-col"><input type="checkbox" id="coletorSelecionarTodos" onchange="coletorSelecionarTodos(this.checked)"></th>
+                            <th>#</th>
+                            <th>Tratado</th>
+                            <th>Nome</th>
+                            <th>Empresa</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th>Website</th>
+                            <th>CNPJ</th>
+                            <th>Instagram</th>
+                            <th>LinkedIn</th>
+                            <th>Endereço</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coletorTableBody"></tbody>
+                </table>
+            </div>
+            <div id="coletorPaginacao" class="coletor-paginacao"></div>
+        </section>
+
+        <!-- ============ CALENDÁRIO ============ -->
+        <section class="section" id="section-calendario">
+            <div class="calendar-header">
+                <h3 id="calendarTitle" style="font-size:18px;font-weight:700;">Janeiro 2025</h3>
+                <div class="calendar-nav">
+                    <button onclick="mudarMes(-1)">◀</button>
+                    <button onclick="voltarHoje()">Hoje</button>
+                    <button onclick="mudarMes(1)">▶</button>
+                    <button class="btn btn-outline btn-sm" onclick="imprimirTarefasFuturas()" title="Gerar PDF de tarefas futuras">Imprimir Tarefas (PDF)</button>
+                </div>
+            </div>
+            <div class="calendar-legend">
+                <span><span class="legend-dot" style="background:var(--stage-pedido);"></span> ponto verde = atividade registrada no dia</span>
+                <span>= existe tarefa agendada no dia</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="calendar-details" id="calendarDetails">
+                <div class="empty-state">
+                    <span class="emoji-big"><span data-icone="calendario"></span></span>
+                    <p>Selecione uma data no calendário</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ COMUNICAÇÃO ============ -->
+        <section class="section" id="section-comunicacao">
+            <div class="flex flex-between flex-wrap gap-8 mb-16">
+                <h3 style="font-size:18px;font-weight:700;">Central de Comunicação</h3>
+                <div class="flex gap-8 flex-wrap" style="align-items:center;">
+                    <select id="comFiltroVendedor" onchange="renderizarComunicacao()" style="display:none;padding:8px 14px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                        <option value="">Todos os vendedores</option>
+                    </select>
+                    <select id="comFiltroCanal" onchange="renderizarComunicacao()" style="padding:8px 14px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                        <option value="">Todos os canais</option>
+                        <option value="email">E-mail</option>
+                        <option value="whatsapp">WhatsApp</option>
+                    </select>
+                    <select id="comFiltroPeriodo" onchange="renderizarComunicacao()" style="padding:8px 14px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                        <option value="7">Últimos 7 dias</option>
+                        <option value="30" selected>Últimos 30 dias</option>
+                        <option value="90">Últimos 90 dias</option>
+                        <option value="0">Tudo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="relatorio-resumo" id="comunicacaoResumoContainer"></div>
+
+            <div class="relatorio-card mb-16">
+                <h3>Contatos Atrasados</h3>
+                <p class="text-xs text-muted mb-8">Clientes sem nenhum contato (ligação, e-mail ou WhatsApp) além do limite esperado pro potencial deles.</p>
+                <div id="comunicacaoAtrasadosList"></div>
+            </div>
+
+            <div class="relatorio-card">
+                <h3>Linha do Tempo</h3>
+                <div id="comunicacaoTimelineList" class="historico-timeline"></div>
+            </div>
+        </section>
+
+        <!-- ============ CLIENTES ============ -->
+        <section class="section" id="section-clientes">
+            <div id="clientesSubLista">
+                <div class="filters">
+                    <input type="text" id="searchInput" placeholder="Buscar cliente..." oninput="renderizarClientes()">
+                    <select id="filterPotencial" onchange="renderizarClientes()">
+                        <option value="">Todos os potenciais</option>
+                        <option value="A">A - Alto</option>
+                        <option value="B">B - Médio</option>
+                        <option value="C">C - Baixo</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" onclick="resetarFiltros()">Limpar</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Empresa</th>
+                                <th>Contato</th>
+                                <th>CNPJ</th>
+                                <th>Valor Total (Geral)</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientesTableBody">
+                            <tr><td colspan="6"><div class="empty-state compact"><span class="emoji-big"><span data-icone="clientes"></span></span><p class="text-sm">Nenhum cliente cadastrado ainda</p></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ============ RELATÓRIOS ============ -->
+        <section class="section" id="section-relatorios">
+            <!-- Header Fluido com Título, Badge de Período e Ações de Exportação/Impressão -->
+            <div class="rel-fluid-header">
+                <div class="rel-header-title-block">
+                    <div class="rel-header-badge-wrap">
+                        <h2 class="rel-header-title">Relatórios e Inteligência Comercial</h2>
+                        <span class="rel-header-badge" id="relPeriodoBadge">Mensal</span>
+                    </div>
+                    <p class="rel-header-subtitle">Acompanhe métricas em tempo real, conversão de funil, saúde da carteira e previsibilidade de vendas.</p>
+                </div>
+                <div class="rel-header-actions">
+                    <button class="btn btn-outline btn-sm rel-btn-action" onclick="exportarRelatorioCsv()" title="Exportar dados de vendas em CSV">
+                        <span class="rel-btn-icon">📥</span> Exportar CSV
+                    </button>
+                    <button class="btn btn-info btn-sm rel-btn-action" onclick="imprimirRelatorio()" title="Gerar PDF do relatório consolidado">
+                        <span class="rel-btn-icon">🖨️</span> Imprimir Relatório
+                    </button>
+                    <button class="btn btn-warning btn-sm rel-btn-action" onclick="mudarSubAbaRelatorio('orcamentos-abertos')" title="Visualizar relatório detalhado de orçamentos em aberto e dias de aging">
+                        <span class="rel-btn-icon">⏳</span> Orçamentos em Aberto
+                    </button>
+                    <button class="btn btn-danger btn-sm rel-btn-action" onclick="mudarSubAbaRelatorio('orcamentos-perdidos')" title="Visualizar relatório detalhado de orçamentos perdidos e motivos por período">
+                        <span class="rel-btn-icon">📉</span> Orçamentos Perdidos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Toolbar Fluida com Pílulas de Seleção Rápida e Controles de Intervalo -->
+            <div class="rel-fluid-toolbar">
+                <div class="rel-pills-container">
+                    <button type="button" class="rel-pill-btn" data-periodo="hoje" onclick="selecionarPeriodoRapido('hoje')">Hoje</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="semana" onclick="selecionarPeriodoRapido('semana')">7 Dias</button>
+                    <button type="button" class="rel-pill-btn active" data-periodo="mes" onclick="selecionarPeriodoRapido('mes')">Mensal</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="trimestre" onclick="selecionarPeriodoRapido('trimestre')">Trimestral</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="semestre" onclick="selecionarPeriodoRapido('semestre')">Semestral</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="ano" onclick="selecionarPeriodoRapido('ano')">Anual</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="todos" onclick="selecionarPeriodoRapido('todos')">Todo o Período</button>
+                    <button type="button" class="rel-pill-btn" data-periodo="personalizado" onclick="selecionarPeriodoRapido('personalizado')">Personalizado</button>
+                </div>
+
+                <div class="rel-toolbar-controls">
+                    <!-- Navegador de período (‹ período ›) -->
+                    <div class="rel-stepper-control">
+                        <button type="button" class="rel-stepper-btn" onclick="mudarPeriodoOffset(-1)" id="btnPeriodoAnterior" title="Período anterior">‹</button>
+                        <span id="relPeriodoLabel" class="rel-stepper-label"></span>
+                        <button type="button" class="rel-stepper-btn" onclick="mudarPeriodoOffset(1)" id="btnPeriodoProximo" title="Próximo período">›</button>
+                    </div>
+
+                    <!-- Período personalizado -->
+                    <div id="relPeriodoPersonalizadoContainer" class="rel-dates-range" style="display:none;">
+                        <label class="rel-date-field">De: <input type="date" id="relDataInicio" onchange="aplicarPeriodoPersonalizado()"></label>
+                        <label class="rel-date-field">Até: <input type="date" id="relDataFim" onchange="aplicarPeriodoPersonalizado()"></label>
+                    </div>
+
+                    <!-- Filtro por Vendedor -->
+                    <select id="relFiltroUsuario" class="rel-select-vendedor" onchange="mudarFiltroUsuarioRelatorio()" style="display:none;">
+                        <option value="">Todos os vendedores</option>
+                    </select>
+
+                    <!-- Select técnico mantido para sincronia interna -->
+                    <select id="relPeriodoTipo" onchange="mudarTipoPeriodo()" style="display:none;">
+                        <option value="hoje">Hoje</option>
+                        <option value="semana">Últimos 7 dias</option>
+                        <option value="mes" selected>Mensal</option>
+                        <option value="trimestre">Trimestral</option>
+                        <option value="semestre">Semestral</option>
+                        <option value="ano">Anual</option>
+                        <option value="todos">Todo o período</option>
+                        <option value="personalizado">Personalizado</option>
+                    </select>
+
+                    <!-- Elementos de compatibilidade com scripts legados -->
+                    <span id="relAvanPeriodoVinculado" class="rel-periodo-vinculado" style="display:none;">Usando o período geral</span>
+                    <button class="btn btn-outline btn-sm" onclick="relAvanAlternarVisao()" id="relAvanToggleBtn" style="display:none;">Ver relatórios detalhados</button>
+                </div>
+            </div>
+
+            <!-- Sub-Abas Fluidas de Navegação -->
+            <nav class="rel-fluid-tabs-bar" aria-label="Abas de relatórios">
+                <button type="button" class="rel-tab-nav-btn active" data-tab="visao-geral" onclick="mudarSubAbaRelatorio('visao-geral')">
+                    <span class="rel-tab-icon">📊</span> Visão Geral & Metas
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="orcamentos-abertos" onclick="mudarSubAbaRelatorio('orcamentos-abertos')">
+                    <span class="rel-tab-icon">⏳</span> Orçamentos em Aberto (Aging)
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="orcamentos-perdidos" onclick="mudarSubAbaRelatorio('orcamentos-perdidos')">
+                    <span class="rel-tab-icon">📉</span> Orçamentos Perdidos & Motivos
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="funil-vendas" onclick="mudarSubAbaRelatorio('funil-vendas')">
+                    <span class="rel-tab-icon">🌪️</span> Funil & Conversão
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="carteira-saude" onclick="mudarSubAbaRelatorio('carteira-saude')">
+                    <span class="rel-tab-icon">🩺</span> Saúde & Carteira
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="gestao-comercial" onclick="mudarSubAbaRelatorio('gestao-comercial')">
+                    <span class="rel-tab-icon">💡</span> Gestão & Indicadores
+                </button>
+                <button type="button" class="rel-tab-nav-btn" data-tab="visao-completa" onclick="mudarSubAbaRelatorio('visao-completa')">
+                    <span class="rel-tab-icon">📑</span> Visão Completa
+                </button>
+            </nav>
+
+            <!-- CONTEÚDOS DAS SUB-ABAS -->
+
+            <!-- Aba 1: Visão Geral & Metas -->
+            <div id="rel-pane-visao-geral" class="rel-tab-pane active">
+                <div id="relKpisHierContainer" class="mb-16"></div>
+
+                <!-- Card de Metas x Realizado -->
+                <div class="relatorio-card mb-16" id="metaProgressoCard" style="display:none;">
+                    <div class="flex flex-between flex-wrap gap-8" style="align-items:center;">
+                        <h3 style="margin-bottom:0;">Metas x Realizado — <span id="metaPeriodoNome"></span></h3>
+                        <form onsubmit="salvarMetaRapida(event)" class="flex gap-8 flex-wrap" style="align-items:center;">
+                            <span style="font-size:12px;color:var(--text-secondary);">Meta Vendas:</span>
+                            <input type="number" id="metaRapidaVendas" placeholder="Ex: 50000" step="0.01" min="0" class="meta-input" style="width:120px;">
+                            <span style="font-size:12px;color:var(--text-secondary);">Meta Orçamento:</span>
+                            <input type="number" id="metaRapidaOrcamento" placeholder="Ex: 400000" step="0.01" min="0" class="meta-input" style="width:120px;">
+                            <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+                        </form>
+                    </div>
+                    <div id="metaObsPeriodo" class="text-sm" style="color:var(--text-muted);margin-top:4px;"></div>
+                    <div id="metaComparativoChart" style="margin-top:16px;"></div>
+                    <div id="pipelineNecessarioContainer" style="margin-top:16px;"></div>
+                </div>
+
+                <div class="rel-fluid-grid-2 mb-16">
+                    <div class="relatorio-card" id="relEvolucaoContainer"></div>
+                    <div class="relatorio-card" id="relAlertasContainer"></div>
+                </div>
+            </div>
+
+            <!-- Aba NOVA: Orçamentos em Aberto (com riqueza de detalhes e número de dias de aging) -->
+            <div id="rel-pane-orcamentos-abertos" class="rel-tab-pane">
+                <div class="rel-panel-filter-bar">
+                    <div class="rel-panel-filter-group">
+                        <input type="text" id="relAbertosBusca" class="rel-panel-search-input" placeholder="🔍 Buscar por cliente, contato, cidade..." oninput="mudarFiltrosAbertosPainel()">
+                        
+                        <select id="relAbertosFiltroFaixa" class="rel-panel-select" onchange="mudarFiltrosAbertosPainel()">
+                            <option value="todas">Todas as faixas de dias</option>
+                            <option value="0-7">🟢 0 a 7 dias (Recentes)</option>
+                            <option value="8-15">🟡 8 a 15 dias (Em negociação)</option>
+                            <option value="16-30">🟠 16 a 30 dias (Atenção)</option>
+                            <option value="30+">🔴 Mais de 30 dias (Críticos/Estagnados)</option>
+                        </select>
+
+                        <select id="relAbertosFiltroVendedor" class="rel-panel-select" onchange="mudarFiltrosAbertosPainel()">
+                            <option value="">Todos os vendedores</option>
+                        </select>
+
+                        <select id="relAbertosFiltroPotencial" class="rel-panel-select" onchange="mudarFiltrosAbertosPainel()">
+                            <option value="">Todos os potenciais</option>
+                            <option value="alto">Alto potencial</option>
+                            <option value="medio">Médio potencial</option>
+                            <option value="baixo">Baixo potencial</option>
+                        </select>
+
+                        <select id="relAbertosOrdenacao" class="rel-panel-select" onchange="mudarFiltrosAbertosPainel()">
+                            <option value="diasDesc">⚠️ Mais dias em orçamento (urgência)</option>
+                            <option value="diasAsc">Mais recentes primeiro</option>
+                            <option value="valorDesc">Maior valor primeiro</option>
+                            <option value="nomeAsc">Cliente (A-Z)</option>
+                        </select>
+                    </div>
+                    <div class="rel-panel-filter-group">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="exportarCsvOrcamentosAbertos()" title="Exportar orçamentos em aberto para CSV">
+                            📥 Exportar CSV
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="imprimirRelatorioOrcamentosAbertosRico()" title="Imprimir relatório detalhado em PDF com dias de aging">
+                            🖨️ Imprimir Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div id="relOrcamentosAbertosPainel"></div>
+            </div>
+
+            <!-- Aba NOVA: Orçamentos Perdidos & Motivos por Período a Escolher -->
+            <div id="rel-pane-orcamentos-perdidos" class="rel-tab-pane">
+                <!-- Seletor de Período Rápido exclusivo do painel de perdidos -->
+                <div class="rel-panel-filter-bar mb-12">
+                    <div class="rel-panel-filter-group rel-perdidos-pills">
+                        <button type="button" class="rel-pill-btn" data-periodo="hoje" onclick="mudarPeriodoPerdidosRapido('hoje')">Hoje</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="semana" onclick="mudarPeriodoPerdidosRapido('semana')">7 Dias</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="mes" onclick="mudarPeriodoPerdidosRapido('mes')">Mensal</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="trimestre" onclick="mudarPeriodoPerdidosRapido('trimestre')">Trimestral</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="semestre" onclick="mudarPeriodoPerdidosRapido('semestre')">Semestral</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="ano" onclick="mudarPeriodoPerdidosRapido('ano')">Anual</button>
+                        <button type="button" class="rel-pill-btn active" data-periodo="todos" onclick="mudarPeriodoPerdidosRapido('todos')">Todo o Período</button>
+                        <button type="button" class="rel-pill-btn" data-periodo="personalizado" onclick="mudarPeriodoPerdidosRapido('personalizado')">Personalizado</button>
+                    </div>
+
+                    <div class="rel-panel-filter-group">
+                        <!-- Navegador de período do painel de perdidos -->
+                        <div class="rel-stepper-control">
+                            <button type="button" class="rel-stepper-btn" onclick="mudarOffsetPerdidos(-1)" title="Período anterior">‹</button>
+                            <span id="relPerdidosPeriodoLabel" class="rel-stepper-label" style="min-width:110px;text-align:center;font-weight:700;font-size:12px;"></span>
+                            <button type="button" class="rel-stepper-btn" onclick="mudarOffsetPerdidos(1)" title="Próximo período">›</button>
+                        </div>
+
+                        <!-- Período personalizado De/Até -->
+                        <div id="relPerdidosPersonalizadoBox" class="rel-dates-range" style="display:none;">
+                            <label class="rel-date-field">De: <input type="date" id="relPerdidosDataInicio" onchange="aplicarFiltroPerdidosPersonalizado()"></label>
+                            <label class="rel-date-field">Até: <input type="date" id="relPerdidosDataFim" onchange="aplicarFiltroPerdidosPersonalizado()"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros secundários: busca, vendedor, motivo, ordenação -->
+                <div class="rel-panel-filter-bar">
+                    <div class="rel-panel-filter-group">
+                        <input type="text" id="relPerdidosBusca" class="rel-panel-search-input" placeholder="🔍 Buscar por cliente, decisor, motivo..." oninput="mudarFiltrosPerdidosPainel()">
+
+                        <select id="relPerdidosFiltroMotivo" class="rel-panel-select" onchange="mudarFiltrosPerdidosPainel()">
+                            <option value="">Todos os motivos</option>
+                        </select>
+
+                        <select id="relPerdidosFiltroVendedor" class="rel-panel-select" onchange="mudarFiltrosPerdidosPainel()">
+                            <option value="">Todos os vendedores</option>
+                        </select>
+
+                        <select id="relPerdidosOrdenacao" class="rel-panel-select" onchange="mudarFiltrosPerdidosPainel()">
+                            <option value="dataDesc">Mais recentes descartados</option>
+                            <option value="valorDesc">Maior valor perdido</option>
+                            <option value="diasDesc">Maior ciclo até descarte</option>
+                            <option value="nomeAsc">Cliente (A-Z)</option>
+                        </select>
+
+                        <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);cursor:pointer;">
+                            <input type="checkbox" id="relPerdidosApenasOrcamento" onchange="mudarFiltrosPerdidosPainel()">
+                            Apenas etapa Orçamento / com valor
+                        </label>
+                    </div>
+
+                    <div class="rel-panel-filter-group">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="exportarCsvPerdidosMotivos()" title="Exportar orçamentos perdidos em CSV">
+                            📥 Exportar CSV
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="imprimirRelatorioPerdidosMotivos()" title="Imprimir relatório detalhado de perdas em PDF">
+                            🖨️ Imprimir Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div id="relPerdidosMotivosPainel"></div>
+            </div>
+
+            <!-- Aba 2: Funil & Conversão -->
+            <div id="rel-pane-funil-vendas" class="rel-tab-pane">
+                <div class="rel-fluid-grid-2 mb-16">
+                    <div class="relatorio-card" id="relFunilContainer"></div>
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Funil Acumulado</h3>
+                        <div class="bar-chart" id="relPerformanceChart"></div>
+                    </div>
+                </div>
+
+                <div class="rel-fluid-grid-2 mb-16">
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Distribuição por Etapa</h3>
+                        <div class="bar-chart" id="relEtapasChart"></div>
+                    </div>
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Valor por Etapa</h3>
+                        <div class="bar-chart" id="relValorEtapasChart"></div>
+                    </div>
+                </div>
+
+                <div class="rel-fluid-grid-2 mb-16">
+                    <div class="relatorio-card" id="relRankingContainer"></div>
+                    <div class="relatorio-card" id="relRankingVendedoresCard" style="display:none;">
+                        <h3 class="rel-fluid-card-title">Ranking de Vendedores (por vendas no período)</h3>
+                        <div class="bar-chart" id="relRankingVendedores"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba 3: Saúde & Carteira -->
+            <div id="rel-pane-carteira-saude" class="rel-tab-pane">
+                <div class="relatorio-card mb-16" id="relSaudePipelineContainer"></div>
+                <div class="relatorio-card mb-16" id="relPotencialGestaoContainer"></div>
+
+                <div class="rel-fluid-grid-3 mb-16">
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Top 5 Clientes por Valor</h3>
+                        <div class="bar-chart" id="relTopClientes"></div>
+                    </div>
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Distribuição por Potencial</h3>
+                        <div class="bar-chart" id="relPotencialChart"></div>
+                    </div>
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Evolução Mensal de Pedidos</h3>
+                        <div class="bar-chart" id="relEvolucaoPedidos"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba 4: Perdas & Orçamentos -->
+            <div id="rel-pane-perdas-orcamentos" class="rel-tab-pane">
+                <div class="rel-fluid-grid-2 mb-16">
+                    <div class="relatorio-card">
+                        <h3 class="rel-fluid-card-title">Status de Orçamento</h3>
+                        <div class="table-wrapper" id="relStatusOrcamentoContainer"></div>
+                    </div>
+                    <div class="relatorio-card" id="relMotivosContainer"></div>
+                </div>
+
+                <div class="relatorio-card mb-16">
+                    <div class="flex flex-between flex-wrap gap-8 mb-16" style="align-items:center;">
+                        <div>
+                            <h3 style="margin-bottom:2px;">Cards Excluídos / Perdidos</h3>
+                            <p class="text-xs text-muted" style="margin:0;">Filtre as perdas pelo mesmo período geral e por motivo.</p>
+                        </div>
+                        <div class="flex gap-8 flex-wrap" style="align-items:center;">
+                            <select id="perdidosFiltroPeriodoTipo" onchange="mudarFiltroPerdidos()" aria-label="Período dos cards perdidos" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                                <option value="todos">Todo o período</option>
+                                <option value="mes">Este mês</option>
+                                <option value="trimestre">Este trimestre</option>
+                                <option value="semestre">Este semestre</option>
+                                <option value="ano">Este ano</option>
+                                <option value="personalizado">Personalizado</option>
+                            </select>
+                            <div id="perdidosFiltroPersonalizadoContainer" style="display:none;gap:8px;align-items:center;">
+                                <label style="font-size:12px;color:var(--text-muted);">De: <input type="date" id="perdidosDataInicio" onchange="mudarFiltroPerdidos()" aria-label="Data inicial dos cards perdidos" style="padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);"></label>
+                                <label style="font-size:12px;color:var(--text-muted);">Até: <input type="date" id="perdidosDataFim" onchange="mudarFiltroPerdidos()" aria-label="Data final dos cards perdidos" style="padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);"></label>
+                            </div>
+                            <select id="perdidosFiltroMotivo" onchange="mudarFiltroPerdidos()" aria-label="Motivo dos cards perdidos" style="padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                                <option value="">Todos os motivos</option>
+                            </select>
+                            <button class="btn btn-info btn-sm" onclick="imprimirRelatorioPerdidos()" title="Gerar PDF do relatório filtrado">Gerar Relatório</button>
+                        </div>
+                    </div>
+                    <div id="perdidosFiltroResumo" class="text-sm text-muted mb-16"></div>
+                    <div id="perdidosContainer"></div>
+                </div>
+            </div>
+
+            <!-- Aba 5: Gestão Comercial & Indicadores -->
+            <div id="rel-pane-gestao-comercial" class="rel-tab-pane">
+                <div class="relatorio-card mb-16" id="relIndicadoresGestaoContainer"></div>
+                <div class="relatorio-card mb-16" id="relInsightsLeadsContainer"></div>
+            </div>
+
+            <!-- Elementos técnicos invisíveis para compatibilidade e integridade de queries JS -->
+            <div style="display:none;" aria-hidden="true">
+                <div id="relAvanPainel"></div>
+                <div id="relAvanDetalhado">
+                    <div id="relatorioResumoContainer"></div>
+                    <div id="relAvanDetalhadoGrid"></div>
+                </div>
+                <input type="number" id="relAvanMetaMensal" oninput="salvarMetaRelAvan()">
+            </div>
+        </section>
+
+        <!-- ============ HISTÓRICO ============ -->
+        <section class="section" id="section-historico">
+            <div class="flex flex-between flex-wrap gap-8 mb-16">
+                <h3 style="font-size:18px;font-weight:700;">Histórico de Atividades</h3>
+                <select id="historicoFiltroCliente" onchange="renderizarHistorico()" style="padding:8px 14px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);">
+                    <option value="">Todos os clientes</option>
+                </select>
+            </div>
+            <div style="background:var(--bg-card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border-color);">
+                <div id="historicoList" class="historico-timeline">
+                    <div class="empty-state">
+                        <span class="emoji-big"><span data-icone="nota"></span></span>
+                        <p>Nenhuma atividade registrada</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ AUTOMAÇÃO ============ -->
+        <section class="section" id="section-automacao">
+            <div class="section-heading-row"><div><h3>Automação e IA</h3><p class="text-muted">Cadências, recomendações de próxima ação e modelos de abordagem para o vendedor.</p></div></div>
+            <div class="automation-grid"><div class="marketing-card"><div class="card-header"><h3>Nova cadência</h3></div><input id="cadenceName" placeholder="Nome da cadência"><textarea id="cadenceSteps" rows="4" placeholder="Uma etapa por linha. Ex.:&#10;Enviar apresentação&#10;Retornar em 2 dias&#10;Confirmar proposta"></textarea><button class="btn btn-primary" onclick="salvarCadencia()">Salvar cadência</button></div><div class="marketing-card"><div class="card-header"><h3>Cadências salvas</h3></div><div id="cadenceList"></div></div><div class="marketing-card"><div class="card-header"><h3>Assistente comercial</h3></div><p class="text-muted text-sm">Selecione uma oportunidade na Central 360º para gerar uma recomendação baseada no estágio, potencial e última atividade.</p><div id="aiRecommendation" class="ai-recommendation">Nenhuma empresa selecionada.</div></div></div>
+        </section>
+
+        <!-- ============ IMPORTAR ============ -->
+        <section class="section" id="section-importar">
+            <h3 class="mb-16" style="font-size:18px;font-weight:700;">Importar Leads</h3>
+            <div style="background:var(--bg-card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border-color);">
+                <p class="text-muted mb-16">Importe leads a partir de um arquivo CSV. Colunas: Empresa, Cidade, Estado, Telefone, WhatsApp, Email, Decisor, Valor, Potencial, Etapa, Observações, CodigoUnico</p>
+                <div class="flex gap-8 flex-wrap">
+                    <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="importarCSV(event)">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Selecionar CSV</button>
+                    <button class="btn btn-outline" onclick="confirmarCarregarExemplos()">Carregar Exemplos</button>
+                </div>
+                <div id="importStatus" class="mt-16"></div>
+            </div>
+        </section>
+
+        <!-- ============ EXPORTAR ============ -->
+        <section class="section" id="section-exportar">
+            <h3 class="mb-16" style="font-size:18px;font-weight:700;">Exportar Dados</h3>
+            <div class="dashboard-cards">
+                <div class="stat-card leads">
+                    <span class="emoji-big"><span data-icone="dashboard"></span></span>
+                    <div class="label">Exportar CSV</div>
+                    <div class="value" style="font-size:14px;">Compatível com Excel</div>
+                    <button class="btn btn-primary btn-sm mt-8" onclick="exportarCSV()">Baixar</button>
+                </div>
+                <div class="stat-card qualificacao">
+                    <span class="emoji-big"><span data-icone="nota"></span></span>
+                    <div class="label">Exportar JSON</div>
+                    <div class="value" style="font-size:14px;">Dados completos</div>
+                    <button class="btn btn-primary btn-sm mt-8" onclick="exportarJSON()">Baixar</button>
+                </div>
+                <div class="stat-card oportunidades">
+                    <span class="emoji-big"><span data-icone="exportar"></span></span>
+                    <div class="label">Backup Completo do Sistema</div>
+                    <div class="value" style="font-size:14px;">Leads, usuários, metas, campanhas, coletor etc.</div>
+                    <div class="flex gap-8 mt-8">
+                        <button class="btn btn-warning btn-sm" onclick="exportarBackup()">Exportar</button>
+                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('backupInput').click()">Importar</button>
+                        <input type="file" id="backupInput" accept=".json" style="display:none" onchange="importarBackup(event)">
+                    </div>
+                    <p class="text-xs text-muted mt-8">Importar substitui os leads e outros dados atuais. Contas de usuário/senhas não vão neste arquivo — são gerenciadas em Administração.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ADMINISTRAÇÃO ============ -->
+        <section class="section" id="section-admin">
+            <h3 class="admin-section-title">Identidade da Empresa</h3>
+            <div class="admin-card company-settings-card" style="width:100%;margin-bottom:24px;">
+                <div class="admin-card-header">White label do login</div>
+                <p class="text-sm text-muted mb-16">Esses dados aparecem no painel, no título do navegador, no favicon e nos documentos gerados por esta conta.</p>
+                <form id="companySettingsForm" onsubmit="salvarEmpresaWhiteLabel(event)">
+                    <div class="company-settings-layout">
+                        <div class="company-logo-settings">
+                            <div id="companyLogoPreview" class="company-logo-preview-wrap"><span class="text-muted text-sm">Nenhum logotipo configurado. Será usado o favicon padrão.</span></div>
+                            <label class="btn btn-outline btn-sm" for="companyLogoInput">Escolher logotipo</label>
+                            <input type="file" id="companyLogoInput" accept="image/png,image/jpeg,image/svg+xml,image/webp" onchange="lerArquivoLogo(event)" hidden>
+                            <span class="text-xs text-muted">PNG, JPG, SVG ou WEBP até 1 MB.</span>
+                        </div>
+                        <div class="company-fields-grid">
+                            <div class="form-group"><label>Nome da empresa <span class="required">*</span></label><input id="companyName" type="text" required placeholder="Nome exibido no CRM"></div>
+                            <div class="form-group"><label>Nome curto</label><input id="companyShortName" type="text" placeholder="Nome usado no menu"></div>
+                            <div class="form-group"><label>CNPJ</label><input id="companyCnpj" type="text" placeholder="00.000.000/0000-00"></div>
+                            <div class="form-group"><label>E-mail comercial</label><input id="companyEmail" type="email" placeholder="contato@empresa.com"></div>
+                            <div class="form-group"><label>Telefone</label><input id="companyPhone" type="text" placeholder="(00) 0000-0000"></div>
+                            <div class="form-group"><label>Site</label><input id="companySite" type="url" placeholder="https://empresa.com"></div>
+                            <div class="form-group company-field-wide"><label>Endereço</label><input id="companyAddress" type="text" placeholder="Rua, número e complemento"></div>
+                            <div class="form-group"><label>Cidade</label><input id="companyCity" type="text"></div>
+                            <div class="form-group"><label>Estado</label><input id="companyState" type="text" maxlength="2" placeholder="UF"></div>
+                            <div class="form-group"><label>Cor principal</label><input id="companyPrimaryColor" type="color" value="#22384d"></div>
+                            <div class="form-group"><label>Cor de destaque</label><input id="companyAccentColor" type="color" value="#2f7d5b"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions mt-16">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="restaurarIdentidadePadrao()">Restaurar padrão</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Salvar identidade da empresa</button>
+                    </div>
+                </form>
+            </div>
+
+            <h3 class="admin-section-title">Usuários do Sistema</h3>
+            <div class="admin-grid">
+                <div class="admin-card">
+                    <div class="admin-card-header">Novo Usuário</div>
+                    <form id="adminUserForm" onsubmit="salvarUsuario(event)">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" id="uNome" placeholder="Nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" id="uEmail" placeholder="email@empresa.com" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Senha</label>
+                                <input type="text" id="uSenha" placeholder="Senha de acesso" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Papel</label>
+                                <select id="uPapel">
+                                    <option value="vendedor">Vendedor</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm" style="width:100%;">Adicionar Usuário</button>
+                    </form>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">Usuários cadastrados</div>
+                    <div id="adminUsersContainer"></div>
+                </div>
+            </div>
+
+            <h3 class="admin-section-title">Metas (Vendas e Orçamento)</h3>
+            <div class="admin-card" style="width:100%;">
+                <div class="admin-card-header flex flex-between" style="align-items:center;">
+                    <span>Ano de referência</span>
+                    <select id="metaAnoSelect" onchange="renderizarMetasAdmin()" style="padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-primary);color:var(--text-primary);"></select>
+                </div>
+
+                <div class="meta-anual-form">
+                    <div class="flex flex-between" style="align-items:center;">
+                        <strong style="font-size:13px;">Definir Meta Anual (recomendado)</strong>
+                    </div>
+                    <p class="text-xs text-muted mt-4 mb-8">
+                        Informe a meta para o ano inteiro. Ela será dividida automaticamente entre os meses que ainda faltam, respeitando a sazonalidade dos anos anteriores (ou igualmente, se ainda não houver histórico) — e descontando o que já foi realizado nos meses já passados deste ano. Revise os valores na tabela abaixo e clique em "Salvar Alterações" para confirmar.
+                    </p>
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:8px;">
+                            <label>Meta Anual de Vendas (R$)</label>
+                            <input type="number" id="metaAnualVendas" step="0.01" min="0" placeholder="Ex: 600000">
+                        </div>
+                        <div class="form-group" style="margin-bottom:8px;">
+                            <label>Meta Anual de Orçamento (R$)</label>
+                            <input type="number" id="metaAnualOrcamento" step="0.01" min="0" placeholder="Ex: 4800000">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="distribuirMetaAnual()">Distribuir nos Meses Restantes</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mês</th>
+                                <th>Meta Vendas</th>
+                                <th>Realizado</th>
+                                <th>%</th>
+                                <th>Meta Orçamento</th>
+                                <th>Realizado</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metasTableBody"></tbody>
+                    </table>
+                </div>
+                <button class="btn btn-primary btn-sm mt-16" onclick="salvarTodasMetas()">Salvar Alterações</button>
+            </div>
+
+            <h3 class="admin-section-title">Metas Individuais por Vendedor</h3>
+            <div class="admin-card" style="width:100%;">
+                <div class="admin-card-header flex flex-between" style="align-items:center;">
+                    <span>Mês de referência</span>
+                    <select id="metaVendedorMesSelect" onchange="renderizarMetasVendedores()" style="padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-primary);color:var(--text-primary);"></select>
+                </div>
+                <p class="text-xs text-muted mt-4 mb-8">
+                    Defina, opcionalmente, uma meta individual de vendas e orçamento para cada vendedor neste mês. Vendedores sem meta individual não entram no ranking por período.
+                </p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vendedor</th>
+                                <th>Meta Vendas</th>
+                                <th>Realizado</th>
+                                <th>%</th>
+                                <th>Meta Orçamento</th>
+                                <th>Realizado</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metasVendedorTableBody"></tbody>
+                    </table>
+                </div>
+                <button class="btn btn-primary btn-sm mt-16" onclick="salvarMetasVendedores()">Salvar Metas por Vendedor</button>
+            </div>
+
+            <h3 class="admin-section-title">Segurança e dados</h3>
+            <div class="admin-grid">
+                <div class="admin-card"><div class="admin-card-header">Backup local</div><p class="text-xs text-muted mb-8">Exporta leads, configurações, metas e cadências do navegador atual. Não substitui o backup do Supabase.</p><button class="btn btn-primary btn-sm" onclick="exportarBackupCompleto()">Baixar backup JSON</button><label class="btn btn-outline btn-sm" style="cursor:pointer; margin-left:6px;">Restaurar JSON<input type="file" accept="application/json" onchange="restaurarBackupCompleto(event)" hidden></label></div>
+                <div class="admin-card"><div class="admin-card-header">Auditoria local</div><p class="text-xs text-muted mb-8">Registra ações feitas nesta sessão para revisão antes da migração para a tabela audit_logs do Supabase.</p><div id="auditLocalList"></div></div>
+            </div>
+        </section>
+
+    </main>
+    </div>
+
+    <!-- ============ MODAIS ============ -->
+
+    <!-- MODAL LEAD -->
+    <div class="modal-overlay" id="leadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Lead</h2>
+                <button class="modal-close" onclick="fecharModal('leadModal')">✕</button>
+            </div>
+            <form id="leadForm" onsubmit="salvarLead(event)">
+                <input type="hidden" id="leadId" value="">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Empresa <span class="required">*</span></label>
+                        <input type="text" id="fEmpresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Código Único</label>
+                        <input type="text" id="fCodigoUnico" placeholder="ID interno (gerado automaticamente se vazio)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>CNPJ</label>
+                        <div class="input-with-action"><input type="text" id="fCnpj" placeholder="00.000.000/0000-00" maxlength="18"><button type="button" class="btn btn-outline btn-sm" onclick="consultarCNPJ()">Consultar</button></div>
+                        <small class="form-help" id="cnpjLookupStatus">Usado para localizar e pré-preencher dados públicos da empresa.</small>
+                    </div>
+                    <div class="form-group"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="fValor" step="0.01" placeholder="0,00">
+                    </div>
+                    <div class="form-group">
+                        <label>Decisor</label>
+                        <input type="text" id="fDecisor">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" id="fTelefone">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp</label>
+                        <input type="text" id="fWhatsApp">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="fEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>Potencial</label>
+                        <select id="fPotencial">
+                            <option value="A">A - Alto</option>
+                            <option value="B" selected>B - Médio</option>
+                            <option value="C">C - Baixo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text" id="fCidade">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <input type="text" id="fEstado">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Etapa</label>
+                        <select id="fEtapa">
+                            <option value="leads">Leads</option>
+                            <option value="qualificacao">Qualificação</option>
+                            <option value="oportunidades">Oportunidades</option>
+                            <option value="orcamento">Orçamento</option>
+                            <option value="pedido">Pedido</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea id="fObservacoes" rows="2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('leadModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL MODELO -->
+    <div class="modal-overlay" id="modeloModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modeloModalTitle">Novo Modelo de Email</h2>
+                <button class="modal-close" onclick="fecharModal('modeloModal')">✕</button>
+            </div>
+            <form id="modeloForm" onsubmit="salvarModelo(event)">
+                <input type="hidden" id="modeloId" value="">
+                <div class="form-group">
+                    <label>Nome do Modelo <span class="required">*</span></label>
+                    <input type="text" id="mNome" placeholder="Ex: Proposta Comercial" required>
+                </div>
+                <div class="form-group">
+                    <label>Assunto <span class="required">*</span></label>
+                    <input type="text" id="mAssunto" placeholder="Ex: Proposta para {{empresa}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo do Email <span class="required">*</span></label>
+                    <textarea id="mConteudo" rows="6" placeholder="Corpo do email... Use {{empresa}}, {{decisor}}, {{valor}} como variáveis" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags sugeridas</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="btn btn-outline btn-xs" onclick="inserirTag('{{empresa}}')" style="cursor:pointer;">{{empresa}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTag('{{decisor}}')" style="cursor:pointer;">{{decisor}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTag('{{valor}}')" style="cursor:pointer;">{{valor}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTag('{{email}}')" style="cursor:pointer;">{{email}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTag('{{telefone}}')" style="cursor:pointer;">{{telefone}}</span>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('modeloModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-pink">Salvar Modelo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CAMPANHA -->
+    <div class="modal-overlay" id="campanhaModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="campanhaModalTitle">Nova Campanha</h2>
+                <button class="modal-close" onclick="fecharModal('campanhaModal')">✕</button>
+            </div>
+            <form id="campanhaForm" onsubmit="salvarCampanha(event)">
+                <input type="hidden" id="campanhaId" value="">
+                <div class="form-group">
+                    <label>Nome da Campanha <span class="required">*</span></label>
+                    <input type="text" id="cNome" placeholder="Ex: Campanha de Inverno" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modelo de Email</label>
+                        <select id="cModelo" required>
+                            <option value="">Selecione um modelo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="cStatus">
+                            <option value="ativa">Ativa</option>
+                            <option value="pausada">Pausada</option>
+                            <option value="finalizada">Finalizada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de Início</label>
+                        <input type="date" id="cDataInicio">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Término</label>
+                        <input type="date" id="cDataFim">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Público-Alvo (selecionar leads por etapa)</label>
+                    <select id="cAlvo" multiple style="height:80px;">
+                        <option value="leads">Leads</option>
+                        <option value="qualificacao">Qualificação</option>
+                        <option value="oportunidades">Oportunidades</option>
+                        <option value="orcamento">Orçamento</option>
+                        <option value="pedido">Pedido</option>
+                    </select>
+                    <span class="text-xs text-muted">Segure Ctrl para selecionar múltiplos</span>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="cDescricao" rows="2" placeholder="Descrição da campanha"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('campanhaModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-pink">Salvar Campanha</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ENVIO -->
+    <div class="modal-overlay" id="envioModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Enviar Email (via API)</h2>
+                <button class="modal-close" onclick="fecharModal('envioModal')">✕</button>
+            </div>
+            <form id="envioForm" onsubmit="enviarEmail(event)">
+                <input type="hidden" id="envioLeadId" value="">
+                <div class="form-group">
+                    <label>Para (empresa)</label>
+                    <p id="envioEmpresa" style="font-weight:600;padding:8px 12px;background:var(--bg-primary);border-radius:var(--radius-sm);"></p>
+                </div>
+                <div class="form-group">
+                    <label>Email do Destinatário</label>
+                    <input type="email" id="envioEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <select id="envioModelo" onchange="previsualizarEnvio()">
+                        <option value="">Selecionar modelo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Assunto</label>
+                    <input type="text" id="envioAssunto" required>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo</label>
+                    <textarea id="envioConteudo" rows="6" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Enviar via</label>
+                        <select id="envioProvedor" required>
+                            <option value="google">Gmail</option>
+                            <option value="outlook">Outlook</option>
+                            <option value="outlook-web">Outlook na Web (abrir no navegador)</option>
+                            <option value="mailto">Abrir no seu e-mail (sem login/API)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display:flex;align-items:flex-end;">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" id="envioSalvarHistorico" checked>
+                            Salvar no histórico
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('envioModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Enviar via API</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL MODELO WHATSAPP -->
+    <div class="modal-overlay" id="whatsappModeloModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="whatsappModeloModalTitle">Novo Modelo de WhatsApp</h2>
+                <button class="modal-close" onclick="fecharModal('whatsappModeloModal')">✕</button>
+            </div>
+            <form id="whatsappModeloForm" onsubmit="salvarModeloWhatsapp(event)">
+                <input type="hidden" id="wmId" value="">
+                <div class="form-group">
+                    <label>Nome do Modelo <span class="required">*</span></label>
+                    <input type="text" id="wmNome" placeholder="Ex: Primeiro Contato" required>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo da Mensagem <span class="required">*</span></label>
+                    <textarea id="wmConteudo" rows="6" placeholder="Mensagem... Use {{empresa}}, {{decisor}}, {{valor}} como variáveis" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags sugeridas</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{empresa}}')" style="cursor:pointer;">{{empresa}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{decisor}}')" style="cursor:pointer;">{{decisor}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{valor}}')" style="cursor:pointer;">{{valor}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{telefone}}')" style="cursor:pointer;">{{telefone}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{cidade}}')" style="cursor:pointer;">{{cidade}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{estado}}')" style="cursor:pointer;">{{estado}}</span>
+                        <span class="btn btn-outline btn-xs" onclick="inserirTagWhatsapp('{{potencial}}')" style="cursor:pointer;">{{potencial}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Imagem (opcional)</label>
+                    <div class="wm-imagem-dropzone" id="wmImagemDropzone" tabindex="0"
+                         onclick="document.getElementById('wmImagemInput').click()"
+                         onpaste="handlePasteImagemModeloWhatsapp(event)">
+                        <div id="wmImagemPreviewWrap" style="display:none;">
+                            <img id="wmImagemPreview" src="" alt="Preview da imagem">
+                            <button type="button" class="btn btn-danger btn-xs mt-8" onclick="event.stopPropagation();removerImagemModeloWhatsapp()">Remover imagem</button>
+                        </div>
+                        <div id="wmImagemPlaceholder" class="text-sm text-muted">
+                            Clique para escolher um arquivo<br>ou cole uma imagem aqui (Ctrl+V)
+                        </div>
+                    </div>
+                    <input type="file" id="wmImagemInput" accept="image/*" style="display:none" onchange="processarImagemModeloWhatsapp(this.files[0])">
+                    <p class="text-xs text-muted mt-4">Como o envio usa link do WhatsApp (sem API paga), a imagem não vai anexada automaticamente — ao enviar, ela é copiada pra área de transferência pra você colar (Ctrl+V) direto na conversa.</p>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('whatsappModeloModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar Modelo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ENVIO WHATSAPP -->
+    <div class="modal-overlay" id="whatsappModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Enviar WhatsApp (wa.me)</h2>
+                <button class="modal-close" onclick="fecharModal('whatsappModal')">✕</button>
+            </div>
+            <form id="whatsappForm" onsubmit="enviarWhatsApp(event)">
+                <input type="hidden" id="wEnvioLeadId" value="">
+                <div class="form-group">
+                    <label>Para (empresa)</label>
+                    <p id="wEnvioEmpresa" style="font-weight:600;padding:8px 12px;background:var(--bg-primary);border-radius:var(--radius-sm);"></p>
+                </div>
+                <div class="form-group">
+                    <label>Telefone do Destinatário (com DDD, sem código do país)</label>
+                    <input type="text" id="wEnvioTelefone" placeholder="Ex: 11987654321" required>
+                </div>
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <select id="wEnvioModelo" onchange="previsualizarEnvioWhatsApp()">
+                        <option value="">Selecionar modelo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mensagem</label>
+                    <textarea id="wEnvioConteudo" rows="6" required></textarea>
+                </div>
+                <div class="form-group" id="wEnvioImagemWrap" style="display:none;">
+                    <label>Imagem do modelo</label>
+                    <div class="flex gap-8" style="align-items:flex-start;">
+                        <img id="wEnvioImagemPreview" src="" alt="Imagem do modelo" style="max-width:140px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                        <div class="text-xs text-muted">
+                            Ela será copiada pra área de transferência ao clicar em "Abrir no WhatsApp" — cole (Ctrl+V) direto na conversa.<br>
+                            <button type="button" class="btn btn-outline btn-xs mt-4" onclick="baixarImagemModeloWhatsapp()">Baixar imagem (alternativa)</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="wEnvioSalvarHistorico" style="width:auto;" checked>
+                    <label style="margin:0;">Salvar no histórico</label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('whatsappModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Abrir no WhatsApp</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ATIVIDADE -->
+    <div class="modal-overlay" id="atividadeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Registrar Atividade</h2>
+                <button class="modal-close" onclick="fecharModal('atividadeModal')">✕</button>
+            </div>
+            <form id="atividadeForm" onsubmit="salvarAtividade(event)">
+                <input type="hidden" id="atividadeLeadId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data <span class="required">*</span></label>
+                        <input type="date" id="aData" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora</label>
+                        <input type="time" id="aHora" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="aTipo">
+                        <option value="Ligação">Ligação</option>
+                        <option value="Visita">Visita</option>
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="Email">Email</option>
+                        <option value="Reunião">Reunião</option>
+                        <option value="Orçamento">Orçamento</option>
+                        <option value="Pedido">Pedido</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição <span class="required">*</span></label>
+                    <textarea id="aDescricao" rows="2" placeholder="Detalhes da atividade..." required></textarea>
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="aMarcarTarefa" style="width:auto;" onchange="document.getElementById('aTarefaDataWrap').style.display=this.checked?'block':'none';">
+                    <label style="margin:0;">Vincular como tarefa pendente do card (aparece no Calendário)</label>
+                </div>
+                <div class="form-group" id="aTarefaDataWrap" style="display:none;">
+                    <label>Data prevista da tarefa</label>
+                    <input type="date" id="aTarefaData">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('atividadeModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL BUSCA NO GOOGLE MAPS (COLETOR DE LEADS) -->
+    <div class="modal-overlay" id="coletorMapsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Buscar no Google Maps</h2>
+                <button class="modal-close" onclick="fecharModal('coletorMapsModal')">✕</button>
+            </div>
+            <form id="coletorMapsForm" onsubmit="coletorBuscarNoMaps(event)">
+                <div class="form-group">
+                    <label>Cidade/Região</label>
+                    <input type="text" id="coletorMapsCidade" placeholder="Ex: Ribeirão Preto, SP">
+                    <p class="text-xs text-muted mt-4">Necessária se você marcar algum segmento abaixo.</p>
+                </div>
+                <div class="form-group">
+                    <label>Segmentos-alvo (marque um ou mais)</label>
+                    <div id="coletorMapsSegmentosList" class="segmentos-busca-list"></div>
+                    <div class="flex gap-8 mt-8">
+                        <input type="text" id="coletorMapsNovoSegmento" placeholder="Novo segmento (ex: Indústria Química)" style="flex:1;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="adicionarSegmentoBusca()">+ Adicionar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ou busca livre (usada só se nenhum segmento estiver marcado)</label>
+                    <input type="text" id="coletorMapsTermo" placeholder="Ex: restaurantes em Ribeirão Preto, SP">
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" id="coletorMapsBuscarEmail" style="width:auto;" checked>
+                    <label style="margin:0;">Visitar site de cada resultado (busca e-mail/redes sociais e calcula relevância pro seu negócio — mais lento)</label>
+                </div>
+                <p class="text-xs text-muted mb-8">Até 20 estabelecimentos por segmento/busca, direto pela API oficial do Google (não abre o Maps). Marcando vários segmentos, cada um gera uma busca própria.</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('coletorMapsModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="coletorMapsBuscarBtn">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CHAMADA (COLETOR DE LEADS) -->
+    <div class="modal-overlay" id="coletorChamadaModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Painel de Chamada</h2>
+                <button class="modal-close" onclick="coletorFecharChamada()">✕</button>
+            </div>
+            <p class="text-xs text-muted mb-16" id="coletorChamadaTimestamp"></p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="coletorChamadaNome" placeholder="Nome do contato">
+                </div>
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input type="text" id="coletorChamadaEmpresa" placeholder="Empresa">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" id="coletorChamadaTelefone" placeholder="(00) 00000-0000">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="coletorChamadaEmail" placeholder="email@exemplo.com">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" id="coletorChamadaEndereco" placeholder="Endereço completo">
+                </div>
+                <div class="form-group">
+                    <label>CNPJ</label>
+                    <input type="text" id="coletorChamadaCnpj" placeholder="CNPJ">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Status da ligação</label>
+                <select id="coletorChamadaStatus">
+                    <option value="Não atendido">Não atendido</option>
+                    <option value="Atendeu - Interessado">Atendeu - Interessado</option>
+                    <option value="Atendeu - Não interessado">Atendeu - Não interessado</option>
+                    <option value="Aguardar retorno">Aguardar retorno</option>
+                    <option value="Desligou na chamada">Desligou na chamada</option>
+                    <option value="Número inválido">Número inválido</option>
+                    <option value="Agendado">Agendado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Anotações / Observações</label>
+                <textarea id="coletorChamadaObs" rows="3" placeholder="Registre o resumo da conversa..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline" onclick="coletorFecharChamada()">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="coletorSalvarChamada(true)">Salvar anotações</button>
+                <button type="button" class="btn btn-primary" onclick="coletorLigarAgora()">Ligar agora</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MOTIVO DE EXCLUSÃO -->
+    <div class="modal-overlay" id="motivoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Excluir Card</h2>
+                <button class="modal-close" onclick="fecharModal('motivoModal')">✕</button>
+            </div>
+            <form id="motivoForm" onsubmit="confirmarExclusaoLead(event)">
+                <input type="hidden" id="motivoLeadId">
+                <p class="text-sm" style="color:var(--text-secondary);margin-bottom:10px;">
+                    O card <strong id="motivoEmpresaNome"></strong> será movido para "Perdidos" junto com o motivo abaixo.
+                </p>
+                <div class="form-group">
+                    <label>Motivo <span class="required">*</span></label>
+                    <select id="motivoSelect" onchange="document.getElementById('motivoOutroWrap').style.display=(this.value==='Outro')?'block':'none';">
+                        <option value="Perdido por preço">Perdido por preço</option>
+                        <option value="Baixa demanda">Baixa demanda</option>
+                        <option value="Sem retorno do cliente">Sem retorno do cliente</option>
+                        <option value="Concorrência">Concorrência</option>
+                        <option value="Não é o momento">Não é o momento</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group" id="motivoOutroWrap" style="display:none;">
+                    <label>Descreva o motivo</label>
+                    <textarea id="motivoDetalhe" rows="2" placeholder="Explique o motivo..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('motivoModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Excluir Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL AUTORIZAÇÃO PARA ALTERAR VENDA -->
+    <div class="modal-overlay" id="autorizacaoMovimentoModal">
+        <div class="modal" style="max-width:430px;">
+            <div class="modal-header">
+                <h2>Autorização necessária</h2>
+                <button class="modal-close" onclick="cancelarAutorizacaoMovimento()">✕</button>
+            </div>
+            <form id="autorizacaoMovimentoForm" onsubmit="confirmarMovimentoAutorizado(event)">
+                <input type="hidden" id="autorizacaoMovimentoLeadId">
+                <input type="hidden" id="autorizacaoMovimentoEtapaAnterior">
+                <input type="hidden" id="autorizacaoMovimentoEtapaDestino">
+                <div class="alert alert-danger" style="margin-bottom:14px;">
+                    <strong>Este card já está registrado como venda.</strong>
+                    <div class="text-sm mt-8">Ao confirmar, o valor sairá do faturamento do período e a alteração ficará registrada no histórico do card.</div>
+                </div>
+                <p class="text-sm text-muted">Empresa: <strong id="autorizacaoMovimentoEmpresa"></strong></p>
+                <div class="form-group">
+                    <label id="autorizacaoMovimentoEmailLabel">Senha de autorização <span class="required">*</span></label>
+                    <input type="password" id="autorizacaoMovimentoSenha" placeholder="Digite sua senha" autocomplete="current-password" required>
+                </div>
+                <div id="autorizacaoMovimentoErro" class="text-sm" style="display:none;color:var(--danger);margin-bottom:10px;"></div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="cancelarAutorizacaoMovimento()">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" id="btnConfirmarMovimento">Confirmar e mover</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL STATUS DE TAREFA -->
+    <div class="modal-overlay" id="tarefaStatusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Atualizar Tarefa</h2>
+                <button class="modal-close" onclick="fecharModal('tarefaStatusModal')">✕</button>
+            </div>
+            <form id="tarefaStatusForm" onsubmit="salvarStatusTarefa(event)">
+                <input type="hidden" id="tsLeadId">
+                <input type="hidden" id="tsData">
+                <p class="text-sm" style="color:var(--text-secondary);margin-bottom:10px;" id="tsDescricaoAtual"></p>
+                <div class="form-group">
+                    <label>Novo status</label>
+                    <select id="tsStatus" onchange="document.getElementById('tsAdiadaWrap').style.display=(this.value==='adiada')?'block':'none';">
+                        <option value="concluida">Concluída</option>
+                        <option value="adiada">Adiada (nova data)</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="form-group" id="tsAdiadaWrap" style="display:none;">
+                    <label>Nova data <span class="required">*</span></label>
+                    <input type="date" id="tsNovaData">
+                </div>
+                <div class="form-group">
+                    <label>Motivo / observação</label>
+                    <textarea id="tsMotivo" rows="2" placeholder="Explique o motivo (opcional para concluída)..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="fecharModal('tarefaStatusModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CLIENTE -->
+    <div class="modal-overlay" id="clienteModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h2 id="clienteModalTitle">Cliente</h2>
+                <button class="modal-close" onclick="fecharModal('clienteModal')">✕</button>
+            </div>
+            <div id="clienteModalContent"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DETALHE DO INDICADOR -->
+    <div class="modal-overlay" id="relIndicadorDetalheModal">
+        <div class="modal modal-lg rel-indicador-detalhe-modal">
+            <div class="modal-header">
+                <h2 id="relIndicadorDetalheTitulo">Detalhamento do indicador</h2>
+                <button class="modal-close" onclick="fecharModal('relIndicadorDetalheModal')" aria-label="Fechar detalhamento">✕</button>
+            </div>
+            <div id="relIndicadorDetalheContent"></div>
+        </div>
+    </div>
+
+    <!-- MODAL ITENS / ORÇAMENTO -->
+    <div class="modal-overlay" id="itensModal">
+        <div class="modal" style="max-width:760px;">
+            <div class="modal-header">
+                <h2>Orçamento — <span id="itensEmpresaNome"></span></h2>
+                <button class="modal-close" onclick="fecharModal('itensModal')">✕</button>
+            </div>
+
+            <div class="admin-card-header" style="margin-bottom:10px;">Adicionar Produto</div>
+            <div class="form-row" style="grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Produto</label>
+                    <input type="text" id="itemProduto" placeholder="Nome do produto/serviço">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Preço unit. (R$)</label>
+                    <input type="number" id="itemPreco" step="0.01" min="0" placeholder="0,00">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Qtd.</label>
+                    <input type="number" id="itemQtd" step="1" min="1" value="1">
+                </div>
+                <div style="display:flex;gap:4px;">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAdicionarItem" onclick="adicionarItemOrcamento()">+ Add</button>
+                    <button type="button" class="btn btn-warning btn-sm" id="btnAtualizarItem" onclick="atualizarItemOrcamento()" style="display:none;">Atualizar</button>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnCancelarEdicao" onclick="cancelarEdicaoItem()" style="display:none;">Cancelar</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper mt-16">
+                <table>
+                    <thead><tr><th>Produto</th><th>Preço Unit.</th><th>Qtd</th><th>Subtotal</th><th>Ações</th></tr></thead>
+                    <tbody id="itensListaBody">
+                        <tr><td colspan="5"><div class="empty-state compact"><span class="emoji-big"><span data-icone="caixa"></span></span><p class="text-sm">Nenhum produto adicionado</p></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-card-header mt-16" style="margin-bottom:10px;">Condições Comerciais</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Desconto (%)</label>
+                    <input type="number" id="itemDesconto" step="0.01" min="0" max="100" placeholder="0" oninput="recalcularTotalItens()">
+                </div>
+                <div class="form-group">
+                    <label>Frete (R$)</label>
+                    <input type="number" id="itemFrete" step="0.01" min="0" placeholder="0,00" oninput="recalcularTotalItens()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Condições de Pagamento</label>
+                <input type="text" id="itemCondicoes" placeholder="Ex: 30/60/90 dias, à vista, boleto...">
+            </div>
+            <div class="form-group">
+                <label>Observações do Orçamento</label>
+                <textarea id="itemObsOrcamento" rows="2" placeholder="Validade da proposta, frete, garantia..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Anexos (opcional, até 5 arquivos de qualquer formato)</label>
+                <div id="orcAnexosLista" class="mb-8"></div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('orcAnexoInput').click()">+ Adicionar anexo</button>
+                <input type="file" id="orcAnexoInput" style="display:none" onchange="processarAnexoOrcamento(this.files[0])">
+            </div>
+
+            <div class="form-group" id="autorizacaoPedidoWrap" style="display:none;">
+                <label>Autorização de Emissão de Pedido (assinatura do cliente)</label>
+                <div class="form-row" style="grid-template-columns:2fr auto;gap:8px;align-items:end;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Anexo a incluir no documento</label>
+                        <select id="autorizacaoAnexoSelect"></select>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnGerarAutorizacao" onclick="gerarAutorizacaoPedido()">Gerar link de autorização</button>
+                </div>
+                <div id="autorizacaoStatusInfo" class="text-sm text-muted mt-8"></div>
+            </div>
+
+            <div class="meta-row" style="margin-top:14px;background:var(--bg-primary);">
+                <span style="font-weight:700;">Total Geral</span>
+                <span id="itensTotalGeral" style="font-weight:800;font-size:16px;color:var(--stage-pedido);">R$ 0,00</span>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline" onclick="fecharModal('itensModal')">Cancelar</button>
+                <button type="button" class="btn btn-outline" onclick="abrirGeradorPix()">Gerar Cobrança Pix</button>
+                <button type="button" class="btn btn-info" onclick="imprimirOrcamentoPDF()">Imprimir PDF</button>
+                <button type="button" class="btn btn-primary" onclick="salvarItensOrcamento()">Salvar Orçamento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PESQUISA -->
+    <div class="modal-overlay" id="pesquisaModal">
+        <div class="modal" style="max-width:520px;">
+            <div class="modal-header">
+                <h2>Pesquisar Lead</h2>
+                <button class="modal-close" onclick="fecharModal('pesquisaModal')">✕</button>
+            </div>
+            <p class="text-muted mb-16">Escolha onde investigar <strong id="pesquisaEmpresaNome"></strong></p>
+            <div class="cliente-actions-grid" id="pesquisaLinks"></div>
+            <div class="form-actions" style="margin-top:20px;">
+                <button type="button" class="btn btn-outline" onclick="fecharModal('pesquisaModal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIG -->
+    <div class="modal-overlay" id="configModal">
+        <div class="modal" style="max-width:700px;">
+            <div class="modal-header">
+                <h2>Guia de Configuração</h2>
+                <button class="modal-close" onclick="fecharModal('configModal')">✕</button>
+            </div>
+            <div id="configContent">
+                <h4>Gmail API</h4>
+                <ol style="padding-left:20px;margin-bottom:16px;line-height:1.8;">
+                    <li>Acesse <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Crie um projeto e ative a <strong>Gmail API</strong></li>
+                    <li>Vá em Credenciais > Criar ID do cliente OAuth</li>
+                    <li>Tipo: Aplicativo Web, URIs: <code>http://localhost:3000</code></li>
+                    <li>Copie o <strong>Client ID</strong> e substitua no arquivo js/config.js</li>
+                </ol>
+                <p><strong>CLIENT_ID:</strong> <code id="configGmailId">COLE_AQUI_SEU_CLIENT_ID</code></p>
+
+                <hr style="margin:16px 0;border-color:var(--border-color);">
+
+                <h4>Outlook API (Microsoft Graph)</h4>
+                <ol style="padding-left:20px;margin-bottom:16px;line-height:1.8;">
+                    <li>Acesse <a href="https://portal.azure.com/" target="_blank">Azure Portal</a></li>
+                    <li>Vá em Microsoft Entra ID > Registros de aplicativos</li>
+                    <li>Crie um novo registro, URIs: <code>http://localhost:3000</code></li>
+                    <li>Adicione permissões: <code>Mail.Send</code>, <code>Mail.Read</code></li>
+                    <li>Copie o <strong>Client ID</strong> e <strong>Tenant ID</strong></li>
+                </ol>
+                <p><strong>CLIENT_ID:</strong> <code id="configOutlookId">COLE_AQUI_SEU_CLIENT_ID</code></p>
+                <p><strong>TENANT_ID:</strong> <code id="configOutlookTenant">COLE_AQUI_SEU_TENANT_ID</code></p>
+
+                <div class="form-actions" style="margin-top:20px;">
+                    <button class="btn btn-primary" onclick="fecharModal('configModal')">Entendido!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="js/icons.js"></script>
+    <script src="js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/white-label.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/metas.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/email-gmail.js"></script>
+    <script src="js/email-outlook.js"></script>
+    <script src="js/email-send.js"></script>
+    <script src="js/marketing.js"></script>
+    <script src="js/whatsapp.js"></script>
+    <script src="js/coletor.js"></script>
+    <script src="js/meudia.js"></script>
+    <script src="js/busca-global.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/pipeline.js"></script>
+    <script src="js/perdidos.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/clientes.js"></script>
+    <script src="js/leads.js"></script>
+    <script src="js/orcamento.js"></script>
+    <script src="js/autorizacao-pedido.js"></script>
+    <script src="js/pesquisa.js"></script>
+    <script src="js/historico.js"></script>
+    <script src="js/comunicacao.js"></script>
+    <script src="js/relatorios.js"></script>
+    <script src="js/relatorios-detalhados.js"></script>
+    <script src="js/import-export.js"></script>
+    <script src="js/relatorios-avancados.js"></script>
+    <script src="js/advanced-features.js"></script>
+    <script src="js/init.js"></script>
+</body>
+</html>

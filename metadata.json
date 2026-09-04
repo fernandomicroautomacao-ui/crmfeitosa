@@ -1,0 +1,8 @@
+{
+  "name": "Feitosa CRM",
+  "description": "Gestão de projetos e produtos, do lead ao pedido.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

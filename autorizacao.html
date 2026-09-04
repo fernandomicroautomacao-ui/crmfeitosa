@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autorização de Emissão de Pedido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul: #1c3d5a;
+    --azul-claro: #2f6690;
+    --cinza: #6b7280;
+    --linha: #c9cdd3;
+    --bg: #f2f4f7;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #23262b;
+  }
+  .folha{
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    border: 1px solid #e3e6ea;
+    padding: 48px 56px 40px;
+  }
+  .cabecalho{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid var(--azul);
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+  }
+  .cabecalho .empresa strong{
+    display: block;
+    font-size: 17px;
+    color: var(--azul);
+  }
+  .selo{ text-align: right; font-size: 11px; color: var(--cinza); }
+  .selo .numero{ font-size: 13px; font-weight: 700; color: var(--azul-claro); }
+  h1{
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--azul);
+    margin: 0 0 6px;
+    text-transform: uppercase;
+  }
+  .subtitulo{ text-align: center; font-size: 12.5px; color: var(--cinza); margin-bottom: 30px; }
+  .bloco{ margin-bottom: 26px; }
+  .bloco-titulo{
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--azul-claro);
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--linha);
+  }
+  table.itens{ width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.itens th{
+    background: var(--azul);
+    color: #fff;
+    text-align: left;
+    padding: 8px 10px;
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+  }
+  table.itens td{ padding: 8px 10px; border-bottom: 1px solid var(--linha); }
+  table.itens tr:last-child td{ border-bottom: 2px solid var(--linha); }
+  .total-row td{ font-weight: 700; color: var(--azul); text-align: right; border-bottom: none !important; }
+  .declaracao{
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #333;
+    background: #f8fafc;
+    border-left: 3px solid var(--azul-claro);
+    padding: 14px 18px;
+    margin: 30px 0;
+  }
+  .anexo-embed{ margin: 10px 0 30px; }
+  .anexo-embed iframe{ width: 100%; height: 480px; border: 1px solid var(--linha); border-radius: 6px; }
+  .anexo-embed img{ max-width: 100%; border: 1px solid var(--linha); border-radius: 6px; }
+  .anexo-embed a.download{
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--azul-claro);
+  }
+  .assinatura-area{ margin-top: 40px; text-align: center; }
+  .assinatura-area .caligrafica{
+    font-family: 'Dancing Script', cursive;
+    font-size: 34px;
+    color: #1a2f4b;
+    min-height: 52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+    outline: none;
+    border-bottom: 1px solid #23262b;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .assinatura-area .caligrafica[data-placeholder]:empty::before{
+    content: attr(data-placeholder);
+    color: #b7c0cc;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 13px;
+  }
+  .assinatura-area .nome-cliente{ margin-top: 8px; font-size: 12.5px; color: var(--cinza); }
+  .btn{
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 6px;
+    border: 1px solid var(--azul-claro);
+    background: var(--azul-claro);
+    color: #fff;
+    cursor: pointer;
+  }
+  .btn:disabled{ opacity: .6; cursor: default; }
+  .certificado{
+    margin-top: 40px;
+    border: 1px solid #d8c98a;
+    border-radius: 8px;
+    background: linear-gradient(#fffdf6, #fbf7ea);
+    padding: 22px 26px;
+  }
+  .cert-cabecalho{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px dashed #c9b96a;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+  }
+  .selo-digital{
+    width: 40px; height: 40px; flex: 0 0 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4e6a8, #b8952f 75%);
+    border: 2px solid #8a6d1f;
+    display: flex; align-items: center; justify-content: center;
+    color: #4a3a10; font-size: 18px; font-weight: 700;
+  }
+  .cert-titulo{ font-size: 13.5px; font-weight: 700; color: #6b551a; text-transform: uppercase; }
+  .cert-subtitulo{ font-size: 11px; color: #8a7a45; }
+  .cert-linha{ display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; border-bottom: 1px dotted #e3d9ab; font-size: 11.5px; color: #4a3a10; }
+  .cert-linha span{ color: #8a7a45; }
+  .cert-linha strong{ text-align: right; word-break: break-word; max-width: 65%; }
+  .aviso{ text-align: center; padding: 60px 20px; color: var(--cinza); }
+  .aviso.erro{ color: #a33; }
+  @media print{ .assinatura-area button{ display:none; } }
+  @media (max-width: 600px){
+    .folha{ padding: 26px 20px; }
+    .cabecalho{ flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="folha" id="folha" style="display:none;">
+    <div class="cabecalho">
+      <div class="empresa">
+        <strong id="campoEmpresa"></strong>
+        Autorização de Emissão de Pedido de Venda
+      </div>
+    </div>
+
+    <h1>Autorização de Emissão de Pedido</h1>
+    <div class="subtitulo">O cliente abaixo confirma e autoriza a emissão do pedido de venda descrito neste documento.</div>
+
+    <div class="bloco" id="blocoCondicoes" style="display:none;">
+      <div class="bloco-titulo">Condições Comerciais</div>
+      <div id="campoCondicoes" style="font-size:13.5px;"></div>
+    </div>
+
+    <div class="bloco" id="blocoAnexo" style="display:none;">
+      <div class="bloco-titulo">Documento do Pedido (anexo)</div>
+      <div class="anexo-embed" id="anexoEmbed"></div>
+    </div>
+
+    <div class="declaracao">
+      Declaro, para os devidos fins, que autorizo a emissão do pedido de venda acima descrito,
+      estando ciente dos itens, valores e condições apresentados, assumindo a responsabilidade
+      pela veracidade das informações prestadas neste documento.
+    </div>
+
+    <div class="assinatura-area" id="areaAssinatura"></div>
+
+    <div class="certificado" id="certificado" style="display:none;">
+      <div class="cert-cabecalho">
+        <div class="selo-digital">&#10003;</div>
+        <div>
+          <div class="cert-titulo">Certificado Digital de Autenticação</div>
+          <div class="cert-subtitulo">Registro gerado automaticamente no momento da assinatura — não substitui certificação ICP-Brasil</div>
+        </div>
+      </div>
+      <div id="certConteudo"></div>
+    </div>
+  </div>
+
+  <div class="aviso" id="avisoCarregando">Carregando documento…</div>
+  <div class="aviso erro" id="avisoErro" style="display:none;"></div>
+
+  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script>
+    function formatarMoeda(v) {
+      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function getToken() {
+      return new URLSearchParams(window.location.search).get('token');
+    }
+
+    function renderizarDocumento(a) {
+      document.getElementById('campoEmpresa').textContent = a.empresa;
+
+      if (a.condicoes) {
+        document.getElementById('blocoCondicoes').style.display = 'block';
+        document.getElementById('campoCondicoes').textContent = a.condicoes;
+      }
+
+      if (a.anexo_data_url) {
+        document.getElementById('blocoAnexo').style.display = 'block';
+        const embed = document.getElementById('anexoEmbed');
+        if (a.anexo_tipo === 'application/pdf') {
+          embed.innerHTML = `<iframe src="${a.anexo_data_url}"></iframe>`;
+        } else if ((a.anexo_tipo || '').startsWith('image/')) {
+          embed.innerHTML = `<img src="${a.anexo_data_url}">`;
+        } else {
+          embed.innerHTML = `<a class="download" href="${a.anexo_data_url}" download="${a.anexo_nome || 'anexo'}">Baixar anexo (${a.anexo_nome || 'arquivo'})</a>`;
+        }
+      }
+
+      renderizarAssinatura(a);
+      document.getElementById('folha').style.display = 'block';
+      document.getElementById('avisoCarregando').style.display = 'none';
+    }
+
+    function renderizarCertificado(a) {
+      document.getElementById('certificado').style.display = 'block';
+      document.getElementById('certConteudo').innerHTML = `
+        <div class="cert-linha"><span>Nome</span><strong>${a.assinatura_nome}</strong></div>
+        <div class="cert-linha"><span>Data/hora</span><strong>${a.assinatura_data_hora}</strong></div>
+        <div class="cert-linha"><span>Endereço IP</span><strong>${a.assinatura_ip}</strong></div>
+        <div class="cert-linha"><span>Código de verificação</span><strong>${a.assinatura_hash}</strong></div>
+      ` + (a.anexo_data_url_assinado
+        ? `<a class="download" href="${a.anexo_data_url_assinado}" download="autorizacao-assinada-${a.id}.pdf">Baixar PDF assinado (com certificado incluso)</a>`
+        : '');
+
+      if (a.anexo_data_url_assinado) {
+        const embed = document.getElementById('anexoEmbed');
+        if (embed) embed.innerHTML = `<iframe src="${a.anexo_data_url_assinado}"></iframe>`;
+      }
+    }
+
+    function renderizarAssinatura(a) {
+      const area = document.getElementById('areaAssinatura');
+      if (a.status === 'assinado') {
+        area.innerHTML = `<div class="caligrafica" style="border-bottom:none;">${a.assinatura_nome}</div><div class="nome-cliente">Assinado digitalmente</div>`;
+        renderizarCertificado(a);
+        return;
+      }
+
+      area.innerHTML = `<button class="btn" id="btnIniciarAssinatura">Assinar Digitalmente</button>`;
+      document.getElementById('btnIniciarAssinatura').addEventListener('click', () => {
+        area.innerHTML = `
+          <div class="caligrafica" id="campoNomeAssinatura" contenteditable="true" data-placeholder="digite seu nome completo"></div>
+          <button class="btn" id="btnConfirmarAssinatura" style="margin-top:14px;">Confirmar Assinatura</button>
+        `;
+        const campo = document.getElementById('campoNomeAssinatura');
+        campo.focus();
+        document.getElementById('btnConfirmarAssinatura').addEventListener('click', async () => {
+          const nome = campo.textContent.trim();
+          if (!nome) {
+            campo.focus();
+            return;
+          }
+          const btn = document.getElementById('btnConfirmarAssinatura');
+          btn.disabled = true;
+          btn.textContent = 'Assinando…';
+          campo.setAttribute('contenteditable', 'false');
+
+          const { data, error } = await supabaseClient.functions.invoke('super-responder', {
+            body: { action: 'assinar', token: getToken(), nome }
+          });
+
+          if (error || !data || data.error) {
+            alert('Erro ao assinar: ' + (error ? error.message : data.error));
+            campo.setAttribute('contenteditable', 'true');
+            btn.disabled = false;
+            btn.textContent = 'Confirmar Assinatura';
+            return;
+          }
+
+          renderizarAssinatura(data.autorizacao);
+        });
+      });
+    }
+
+    async function carregar() {
+      const token = getToken();
+      if (!token) {
+        document.getElementById('avisoCarregando').style.display = 'none';
+        document.getElementById('avisoErro').style.display = 'block';
+        document.getElementById('avisoErro').textContent = 'Link inválido: falta o código do documento.';
+        return;
+      }
+
+      const { data, error } = await supabaseClient.functions.invoke('super-responder', {
+        body: { action: 'obter', token }
+      });
+
+      if (error || !data || data.error) {
+        document.getElementById('avisoCarregando').style.display = 'none';
+        document.getElementById('avisoErro').style.display = 'block';
+        document.getElementById('avisoErro').textContent = error ? error.message : data.error;
+        return;
+      }
+
+      renderizarDocumento(data.autorizacao);
+    }
+
+    carregar();
+  </script>
+</body>
+</html>
